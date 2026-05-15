@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Rushil Gorasia — Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #050a0e;
+    --surface: #0d1519;
+    --accent: #00e5ff;
+    --accent2: #7fff6e;
+    --accent3: #ff4757;
+    --text: #e8f4f8;
+    --muted: #4a6b75;
+    --card-bg: #0d1f29;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Space Mono', monospace;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* Custom cursor */
+  .cursor {
+    position: fixed; width: 12px; height: 12px;
+    background: var(--accent); border-radius: 50%;
+    pointer-events: none; z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.05s;
+    mix-blend-mode: difference;
+  }
+  .cursor-ring {
+    position: fixed; width: 40px; height: 40px;
+    border: 1.5px solid var(--accent);
+    border-radius: 50%; pointer-events: none; z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: all 0.15s ease;
+    opacity: 0.6;
+  }
+
+  /* Grid background */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image:
+      linear-gradient(rgba(0,229,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,229,255,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1.2rem 4rem;
+    background: rgba(5,10,14,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(0,229,255,0.08);
+  }
+  .nav-logo {
+    font-family: 'Syne', sans-serif; font-weight: 800;
+    font-size: 1.3rem; letter-spacing: -0.02em;
+    color: var(--accent);
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--text); }
+  nav ul { list-style: none; display: flex; gap: 2.5rem; }
+  nav ul a {
+    color: var(--muted); text-decoration: none;
+    font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  nav ul a:hover { color: var(--accent); }
+
+  /* HERO */
+  #hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex; align-items: center;
+    padding: 0 4rem;
+    overflow: hidden;
+    z-index: 1;
+  }
+
+  .hero-content { max-width: 800px; position: relative; z-index: 2; }
+
+  .hero-eyebrow {
+    font-size: 0.75rem; letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 1.5rem;
+    display: flex; align-items: center; gap: 1rem;
+  }
+  .hero-eyebrow::before {
+    content: '';
+    display: block; width: 40px; height: 1px;
+    background: var(--accent);
+  }
+
+  h1 {
+    font-family: 'Syne', sans-serif; font-weight: 800;
+    font-size: clamp(3.5rem, 9vw, 7.5rem);
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+    margin-bottom: 2rem;
+  }
+  h1 .name-line { display: block; }
+  h1 .name-accent {
+    color: transparent;
+    -webkit-text-stroke: 1.5px var(--accent);
+  }
+
+  .hero-desc {
+    font-size: 0.95rem; line-height: 1.9;
+    color: var(--muted); max-width: 480px;
+    margin-bottom: 2.5rem;
+  }
+
+  .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+  .btn {
+    padding: 0.8rem 2rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase;
+    text-decoration: none; cursor: none;
+    transition: all 0.2s;
+    display: inline-flex; align-items: center; gap: 0.5rem;
+  }
+  .btn-primary {
+    background: var(--accent); color: #000;
+    border: none;
+    clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
+  }
+  .btn-primary:hover { background: #fff; }
+  .btn-outline {
+    background: transparent; color: var(--accent);
+    border: 1px solid rgba(0,229,255,0.35);
+    clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
+  }
+  .btn-outline:hover { border-color: var(--accent); background: rgba(0,229,255,0.06); }
+
+
+
+  /* Glowing orb */
+  .hero-orb {
+    position: absolute; right: -100px; top: 50%;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle at center, rgba(0,229,255,0.07) 0%, transparent 65%);
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
+
+  /* Scrolling ticker */
+  .ticker-wrap {
+    position: relative; z-index: 1;
+    border-top: 1px solid rgba(0,229,255,0.1);
+    border-bottom: 1px solid rgba(0,229,255,0.1);
+    overflow: hidden; padding: 0.8rem 0;
+    background: rgba(0,229,255,0.02);
+  }
+  .ticker {
+    display: flex; gap: 3rem;
+    white-space: nowrap;
+    animation: ticker 20s linear infinite;
+  }
+  @keyframes ticker {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  .ticker-item {
+    font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--muted); display: flex; align-items: center; gap: 1.5rem;
+  }
+  .ticker-item::after { content: '◆'; color: var(--accent); font-size: 0.5rem; }
+
+  /* ABOUT */
+  #about {
+    position: relative; z-index: 1;
+    padding: 7rem 4rem;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 6rem;
+    align-items: center;
+  }
+  .section-label {
+    font-size: 0.7rem; letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 1.2rem;
+    display: flex; align-items: center; gap: 1rem;
+  }
+  .section-label::after {
+    content: ''; flex: 1; height: 1px;
+    background: rgba(0,229,255,0.2); max-width: 80px;
+  }
+  h2 {
+    font-family: 'Syne', sans-serif; font-weight: 800;
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    line-height: 1.1; letter-spacing: -0.03em;
+    margin-bottom: 1.5rem;
+  }
+  .about-text { color: var(--muted); line-height: 1.9; font-size: 0.9rem; margin-bottom: 1.5rem; }
+
+  /* Skills grid */
+  .skills-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .skill-item {
+    display: flex; align-items: center; gap: 0.75rem;
+    padding: 0.9rem 1rem;
+    background: var(--card-bg);
+    border: 1px solid rgba(0,229,255,0.08);
+    font-size: 0.78rem;
+    transition: border-color 0.2s;
+  }
+  .skill-item:hover { border-color: rgba(0,229,255,0.35); }
+  .skill-icon { color: var(--accent); font-size: 1rem; }
+
+  /* Stats */
+  .about-stats {
+    display: flex; flex-direction: column; gap: 2rem;
+  }
+  .stat-block { border-left: 2px solid var(--accent); padding-left: 1.5rem; }
+  .stat-num {
+    font-family: 'Syne', sans-serif; font-weight: 800;
+    font-size: 3.5rem; color: var(--accent);
+    line-height: 1;
+  }
+  .stat-label { font-size: 0.75rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 0.3rem; }
+
+  /* PROJECTS */
+  #projects {
+    position: relative; z-index: 1;
+    padding: 7rem 4rem;
+  }
+  .projects-header {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    margin-bottom: 4rem;
+  }
+  .projects-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;
+  }
+
+  .project-card {
+    background: var(--card-bg);
+    border: 1px solid rgba(0,229,255,0.1);
+    padding: 2.5rem;
+    position: relative; overflow: hidden;
+    transition: transform 0.3s, border-color 0.3s;
+    clip-path: polygon(0 0, calc(100% - 24px) 0, 100% 24px, 100% 100%, 24px 100%, 0 calc(100% - 24px));
+  }
+  .project-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, var(--accent), transparent);
+    transform: scaleX(0); transform-origin: left;
+    transition: transform 0.4s;
+  }
+  .project-card:hover { transform: translateY(-6px); border-color: rgba(0,229,255,0.3); }
+  .project-card:hover::before { transform: scaleX(1); }
+
+  .project-card.featured {
+    grid-column: 1 / -1;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 3rem;
+    align-items: center;
+  }
+  .project-card.featured::before {
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+  }
+
+  .project-num {
+    font-size: 0.7rem; letter-spacing: 0.2em; color: var(--muted);
+    margin-bottom: 1.5rem;
+  }
+  .project-num span { color: var(--accent); }
+
+  .project-name {
+    font-family: 'Syne', sans-serif; font-weight: 700;
+    font-size: 1.8rem; letter-spacing: -0.02em;
+    margin-bottom: 0.75rem;
+    line-height: 1.2;
+  }
+  .project-desc {
+    color: var(--muted); font-size: 0.83rem; line-height: 1.8;
+    margin-bottom: 2rem;
+  }
+  .project-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 2rem; }
+  .tag {
+    padding: 0.3rem 0.75rem;
+    font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase;
+    border: 1px solid rgba(0,229,255,0.2);
+    color: var(--accent);
+  }
+
+  .project-links { display: flex; gap: 1rem; align-items: center; }
+  .project-link {
+    text-decoration: none; color: var(--text);
+    font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase;
+    display: flex; align-items: center; gap: 0.4rem;
+    padding: 0.6rem 1.2rem;
+    border: 1px solid rgba(255,255,255,0.1);
+    transition: all 0.2s;
+  }
+  .project-link:hover { border-color: var(--accent); color: var(--accent); }
+  .project-link.primary {
+    background: var(--accent); color: #000; border-color: var(--accent);
+    clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+  }
+  .project-link.primary:hover { background: #fff; }
+
+  /* Features list */
+  .feature-list { list-style: none; display: flex; flex-direction: column; gap: 0.75rem; }
+  .feature-list li {
+    display: flex; align-items: flex-start; gap: 0.75rem;
+    font-size: 0.82rem; color: var(--muted); line-height: 1.6;
+  }
+  .feature-list li::before {
+    content: '▸'; color: var(--accent2); flex-shrink: 0; margin-top: 2px;
+  }
+
+  /* CONTACT */
+  #contact {
+    position: relative; z-index: 1;
+    padding: 7rem 4rem;
+    border-top: 1px solid rgba(0,229,255,0.08);
+    text-align: center;
+  }
+  .contact-eyebrow {
+    font-size: 0.75rem; letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 1.5rem;
+  }
+  .contact-heading {
+    font-family: 'Syne', sans-serif; font-weight: 800;
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    line-height: 1.05; letter-spacing: -0.04em;
+    margin-bottom: 2rem;
+  }
+  .contact-heading .hollow {
+    color: transparent;
+    -webkit-text-stroke: 1.5px rgba(0,229,255,0.5);
+  }
+  .contact-sub { color: var(--muted); font-size: 0.9rem; max-width: 450px; margin: 0 auto 3rem; line-height: 1.8; }
+
+  .social-links { display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap; }
+  .social-link {
+    display: flex; align-items: center; gap: 0.6rem;
+    padding: 0.85rem 1.8rem;
+    font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase;
+    text-decoration: none; color: var(--text);
+    border: 1px solid rgba(255,255,255,0.1);
+    transition: all 0.2s;
+    clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+  }
+  .social-link:hover { border-color: var(--accent); color: var(--accent); }
+  .social-link.gh:hover { border-color: #fff; color: #fff; }
+
+  /* Footer */
+  footer {
+    position: relative; z-index: 1;
+    padding: 2rem 4rem;
+    border-top: 1px solid rgba(0,229,255,0.06);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .footer-copy { font-size: 0.72rem; color: var(--muted); }
+  .footer-handle { font-size: 0.72rem; color: var(--muted); }
+  .footer-handle a { color: var(--accent); text-decoration: none; }
+
+  /* Scan line effect */
+  body::after {
+    content: '';
+    position: fixed; inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.04) 2px,
+      rgba(0,0,0,0.04) 4px
+    );
+    pointer-events: none; z-index: 0;
+  }
+
+  /* Animations */
+  .fade-in {
+    opacity: 0; transform: translateY(28px);
+    animation: fadeUp 0.7s ease forwards;
+  }
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .d1 { animation-delay: 0.1s; }
+  .d2 { animation-delay: 0.2s; }
+  .d3 { animation-delay: 0.35s; }
+  .d4 { animation-delay: 0.5s; }
+  .d5 { animation-delay: 0.65s; }
+
+  /* Blinking cursor */
+  .blink {
+    display: inline-block; width: 3px; height: 1em;
+    background: var(--accent); margin-left: 4px;
+    animation: blink 1s step-end infinite; vertical-align: middle;
+  }
+  @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+  /* Corner decoration */
+  .corner-deco {
+    position: absolute;
+    width: 60px; height: 60px;
+    border-top: 2px solid rgba(0,229,255,0.4);
+    border-left: 2px solid rgba(0,229,255,0.4);
+    top: 0; left: 0; pointer-events: none;
+  }
+  .corner-deco.br {
+    border-top: none; border-left: none;
+    border-bottom: 2px solid rgba(0,229,255,0.4);
+    border-right: 2px solid rgba(0,229,255,0.4);
+    top: auto; left: auto; bottom: 0; right: 0;
+  }
+
+  @media (max-width: 900px) {
+    nav { padding: 1rem 1.5rem; }
+    nav ul { gap: 1.2rem; }
+    #hero { padding: 6rem 1.5rem 3rem; }
+    .hero-code { display: none; }
+    #about { padding: 4rem 1.5rem; grid-template-columns: 1fr; gap: 3rem; }
+    #projects { padding: 4rem 1.5rem; }
+    .projects-grid { grid-template-columns: 1fr; }
+    .project-card.featured { grid-column: auto; grid-template-columns: 1fr; }
+    .projects-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+    #contact { padding: 4rem 1.5rem; }
+    footer { padding: 1.5rem; flex-direction: column; gap: 0.5rem; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="#hero" class="nav-logo">AXE<span>MOTH</span></a>
+  <ul>
+    <li><a href="#about">About</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-orb"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow fade-in d1">Full Stack Developer</div>
+    <h1 class="fade-in d2">
+      <span class="name-line">Rushil</span>
+      <span class="name-line name-accent">Gorasia</span>
+    </h1>
+    <p class="hero-desc fade-in d3">
+      Building secure, scalable infrastructure — from self-hosted identity providers to real-time polling systems. I write code that powers systems people actually rely on.<span class="blink"></span>
+    </p>
+    <div class="hero-btns fade-in d4">
+      <a href="#projects" class="btn btn-primary">View Projects ↓</a>
+      <a href="https://github.com/Axemoth" target="_blank" class="btn btn-outline">GitHub ↗</a>
+    </div>
+  </div>
+
+
+</section>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker">
+    <span class="ticker-item">Node.js</span>
+    <span class="ticker-item">React</span>
+    <span class="ticker-item">PostgreSQL</span>
+    <span class="ticker-item">OpenID Connect</span>
+    <span class="ticker-item">Docker</span>
+    <span class="ticker-item">PKCE</span>
+    <span class="ticker-item">RS256</span>
+    <span class="ticker-item">WebSockets</span>
+    <span class="ticker-item">Drizzle ORM</span>
+    <span class="ticker-item">Azure</span>
+    <span class="ticker-item">Vercel</span>
+    <span class="ticker-item">Python</span>
+    <span class="ticker-item">JavaScript</span>
+    <span class="ticker-item">Node.js</span>
+    <span class="ticker-item">React</span>
+    <span class="ticker-item">PostgreSQL</span>
+    <span class="ticker-item">OpenID Connect</span>
+    <span class="ticker-item">Docker</span>
+    <span class="ticker-item">PKCE</span>
+    <span class="ticker-item">RS256</span>
+    <span class="ticker-item">WebSockets</span>
+    <span class="ticker-item">Drizzle ORM</span>
+    <span class="ticker-item">Azure</span>
+    <span class="ticker-item">Vercel</span>
+    <span class="ticker-item">Python</span>
+    <span class="ticker-item">JavaScript</span>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div>
+    <div class="section-label">About Me</div>
+    <h2>Crafting systems<br/>from first principles</h2>
+    <p class="about-text">
+      I'm a developer who goes deep. When I build an authentication system, I implement the full OIDC protocol — PKCE, RS256 key signing, token introspection and all. I don't reach for magic boxes when I can understand and own the whole stack.
+    </p>
+    <p class="about-text">
+      My interests span backend architecture, security, and real-time systems. I've deployed across Azure App Service and Vercel, and I enjoy the challenge of making complex infrastructure feel simple to use.
+    </p>
+    <div class="skills-grid">
+      <div class="skill-item"><span class="skill-icon">⬡</span> Node.js / Express</div>
+      <div class="skill-item"><span class="skill-icon">⬡</span> React</div>
+      <div class="skill-item"><span class="skill-icon">⬡</span> PostgreSQL</div>
+      <div class="skill-item"><span class="skill-icon">⬡</span> Python</div>
+      <div class="skill-item"><span class="skill-icon">⬡</span> Docker</div>
+      <div class="skill-item"><span class="skill-icon">⬡</span> OAuth2 / OIDC</div>
+    </div>
+  </div>
+  <div class="about-stats">
+    <div class="stat-block">
+      <div class="stat-num">18</div>
+      <div class="stat-label">Public Repositories</div>
+    </div>
+    <div class="stat-block">
+      <div class="stat-num">2</div>
+      <div class="stat-label">Featured Projects</div>
+    </div>
+    <div class="stat-block">
+      <div class="stat-num">∞</div>
+      <div class="stat-label">Hours debugging JWT flows</div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="projects-header">
+    <div>
+      <div class="section-label">Selected Work</div>
+      <h2>Projects</h2>
+    </div>
+    <a href="https://github.com/Axemoth" target="_blank" class="btn btn-outline" style="flex-shrink:0">All Repos ↗</a>
+  </div>
+
+  <div class="projects-grid">
+
+    <!-- OIDC - Featured -->
+    <div class="project-card featured">
+      <div class="corner-deco"></div>
+      <div class="corner-deco br"></div>
+      <div>
+        <div class="project-num"><span>01</span> / 02 — Featured</div>
+        <div class="project-name">Axemoth OIDC</div>
+        <p class="project-desc">
+          A production-grade, self-hosted OpenID Connect Identity Provider and Single Sign-On platform. Think "Sign in with Google" — but your own, private version of it. Built from the spec up with zero shortcuts.
+        </p>
+        <div class="project-tags">
+          <span class="tag">Node.js</span>
+          <span class="tag">React</span>
+          <span class="tag">PostgreSQL</span>
+          <span class="tag">Drizzle ORM</span>
+          <span class="tag">RS256</span>
+          <span class="tag">PKCE</span>
+          <span class="tag">Docker</span>
+        </div>
+        <div class="project-links">
+          <a href="https://oidc.axemoth.com/" target="_blank" class="project-link primary">Live Demo ↗</a>
+          <a href="https://github.com/Axemoth/OIDC" target="_blank" class="project-link">Source ↗</a>
+        </div>
+      </div>
+      <div>
+        <ul class="feature-list">
+          <li>Full OIDC Authorization Code flow with PKCE enforcement — every authorization is cryptographically verified</li>
+          <li>RS256 asymmetric token signing — access tokens are verifiable by any third-party without shared secrets</li>
+          <li>Developer dashboard to register OAuth clients and manage client secrets</li>
+          <li>Standard OIDC discovery endpoints (<code style="color:var(--accent2);font-size:0.78rem">/.well-known/openid-configuration</code>, JWKS) for auto-configuration</li>
+          <li>Production deployment on Azure App Service (backend) and Vercel (frontend)</li>
+          <li>bcrypt password hashing, single-use auth codes, CORS protection</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Polling -->
+    <div class="project-card">
+      <div class="corner-deco"></div>
+      <div class="corner-deco br"></div>
+      <div class="project-num"><span>02</span> / 02</div>
+      <div class="project-name">Polling</div>
+      <p class="project-desc">
+        A real-time polling and voting application. Create polls, share them, and watch results update live — built to handle concurrent voters with clean state management.
+      </p>
+      <div class="project-tags">
+        <span class="tag">JavaScript</span>
+        <span class="tag">Real-time</span>
+        <span class="tag">WebSockets</span>
+      </div>
+      <div class="project-links">
+        <a href="https://axepoll.axemoth.com/" target="_blank" class="project-link primary">Live Demo ↗</a>
+        <a href="https://github.com/Axemoth/Polling" target="_blank" class="project-link">Source ↗</a>
+      </div>
+    </div>
+
+    <!-- Other work teaser -->
+    <div class="project-card" style="display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:3rem;border-style:dashed;">
+      <div style="font-size:2rem;margin-bottom:1rem;opacity:0.4">+</div>
+      <div class="project-name" style="font-size:1.2rem;">More on GitHub</div>
+      <p class="project-desc" style="max-width:280px;">Stock market tracker, Telegram → WhatsApp bot, DSA in Python, and more.</p>
+      <a href="https://github.com/Axemoth" target="_blank" class="project-link" style="margin-top:auto">Explore ↗</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-eyebrow">Let's connect</div>
+  <h2 class="contact-heading">
+    Got a project<br/>in <span class="hollow">mind?</span>
+  </h2>
+  <p class="contact-sub">
+    Open to interesting problems, collaborations, and full-stack opportunities. Drop a message or find me on socials.
+  </p>
+  <div class="social-links">
+    <a href="https://github.com/Axemoth" target="_blank" class="social-link gh">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.387-1.333-1.756-1.333-1.756-1.09-.745.083-.73.083-.73 1.205.085 1.838 1.236 1.838 1.236 1.07 1.835 2.807 1.305 3.492.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 21.795 24 17.295 24 12c0-6.63-5.37-12-12-12"/></svg>
+      GitHub
+    </a>
+    <a href="https://x.com/Axemoth" target="_blank" class="social-link">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      Twitter / X
+    </a>
+    <a href="https://oidc.axemoth.com/" target="_blank" class="social-link" style="border-color:rgba(127,255,110,0.2);color:var(--accent2);">
+      ⬡ OIDC Demo
+    </a>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-copy">© 2026 Rushil Gorasia — Axemoth</div>
+  <div class="footer-handle">Built with caffeine & curiosity · <a href="https://github.com/Axemoth" target="_blank">github.com/Axemoth</a></div>
+</footer>
+
+<script>
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; cursor.style.left = mx + 'px'; cursor.style.top = my + 'px'; });
+  function animateRing() {
+    rx += (mx - rx) * 0.12;
+    ry += (my - ry) * 0.12;
+    ring.style.left = rx + 'px';
+    ring.style.top = ry + 'px';
+    requestAnimationFrame(animateRing);
+  }
+  animateRing();
+  document.querySelectorAll('a, button').forEach(el => {
+    el.addEventListener('mouseenter', () => { ring.style.transform = 'translate(-50%,-50%) scale(1.5)'; ring.style.opacity = '1'; });
+    el.addEventListener('mouseleave', () => { ring.style.transform = 'translate(-50%,-50%) scale(1)'; ring.style.opacity = '0.6'; });
+  });
+
+  // Scroll reveal
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.project-card, .skill-item, .stat-block').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(30px)';
+    el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+    observer.observe(el);
+  });
+</script>
+</body>
+</html>
