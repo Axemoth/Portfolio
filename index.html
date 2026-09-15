@@ -7,11 +7,11 @@
 <meta name="description" content="Rushil Gorasia — full-stack developer building identity systems, real-time infrastructure, and AI-native SaaS products."/>
 <meta name="theme-color" content="#0a0d12"/>
 <meta property="og:title" content="Rushil Gorasia — Full-Stack Developer"/>
-<meta property="og:description" content="Identity systems, real-time infrastructure, and AI-native products — engineered from spec to shipped."/>
+<meta property="og:description" content="Identity systems, real-time infrastructure, and AI-native products — engineered from spec to shipped. Now with a bonus level."/>
 <meta property="og:type" content="website"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Press+Start+2P&display=swap" rel="stylesheet"/>
 <style>
   :root{
     --ink:#0a0d12;
@@ -25,14 +25,16 @@
     --verified:#6ee7b7;
     --border:rgba(233,236,241,0.09);
     --border-strong:rgba(91,124,250,0.4);
-
+    --pink:#ff5da2;
+    --lime:#c8ff5e;
+    --cyan:#6ee7ff;
+    --gold:#ffd84d;
     --font-display:'Fraunces',serif;
     --font-body:'Inter',sans-serif;
     --font-mono:'IBM Plex Mono',monospace;
-
+    --font-pixel:'Press Start 2P',monospace;
     --pad-x:clamp(1.5rem,6vw,5rem);
   }
-
   *,*::before,*::after{ box-sizing:border-box; margin:0; padding:0; }
   html{ scroll-behavior:smooth; }
   body{
@@ -41,56 +43,63 @@
     font-family:var(--font-body);
     line-height:1.5;
     -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
   }
   section{ scroll-margin-top:5rem; }
-
   body::before{
-    content:'';
-    position:fixed; inset:0;
+    content:''; position:fixed; inset:0;
     background-image:
       linear-gradient(rgba(233,236,241,0.025) 1px, transparent 1px),
       linear-gradient(90deg, rgba(233,236,241,0.025) 1px, transparent 1px);
     background-size:64px 64px;
     z-index:0; pointer-events:none;
   }
-
   a{ color:inherit; }
   ul{ list-style:none; }
   img{ max-width:100%; display:block; }
-
-  a:focus-visible, button:focus-visible{
-    outline:2px solid var(--signal);
-    outline-offset:3px;
-    border-radius:2px;
+  a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible{
+    outline:2px solid var(--signal); outline-offset:3px; border-radius:2px;
   }
-
+  ::selection{ background:var(--signal); color:#08101f; }
   @media (prefers-reduced-motion: reduce){
     *{ animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; scroll-behavior:auto !important; }
+  }
+
+  /* ---------- SCROLL HP BAR ---------- */
+  #hpbar{
+    position:fixed; top:0; left:0; height:3px; width:0%; z-index:200;
+    background:linear-gradient(90deg,var(--signal),var(--cyan),var(--lime),var(--gold),var(--pink));
+    background-size:200% 100%;
+    animation:hpflow 4s linear infinite;
+  }
+  @keyframes hpflow{ to{ background-position:200% 0; } }
+
+  /* ---------- CURSOR ---------- */
+  #cursor-dot,#cursor-ring{ display:none; position:fixed; top:0; left:0; pointer-events:none; z-index:300; border-radius:50%; }
+  @media (pointer:fine){
+    #cursor-dot{ display:block; width:7px; height:7px; background:var(--lime); transform:translate(-50%,-50%); }
+    #cursor-ring{ display:block; width:32px; height:32px; border:1.5px solid rgba(91,124,250,.7); transform:translate(-50%,-50%); transition:width .2s,height .2s,border-color .2s,background .2s; }
+    #cursor-ring.hovering{ width:52px; height:52px; border-color:var(--pink); background:rgba(255,93,162,.08); }
   }
 
   /* ---------- NAV ---------- */
   nav{
     position:fixed; top:0; left:0; right:0; z-index:100;
     display:flex; justify-content:space-between; align-items:center;
-    padding:1.15rem var(--pad-x);
+    padding:1rem var(--pad-x);
     background:rgba(10,13,18,0.82);
     backdrop-filter:blur(14px);
     border-bottom:1px solid var(--border);
   }
   .nav-logo{
-    font-family:var(--font-body); font-weight:600; font-size:0.95rem;
-    letter-spacing:-0.01em; text-decoration:none; color:var(--paper);
+    font-weight:600; font-size:0.95rem; letter-spacing:-0.01em;
+    text-decoration:none; color:var(--paper);
     display:flex; align-items:baseline; gap:0.5rem;
   }
-  .nav-logo .nav-mark{
-    font-family:var(--font-mono); color:var(--signal); font-size:0.72rem;
-    letter-spacing:0.05em;
-  }
-  .nav-links{ display:flex; align-items:center; gap:2.25rem; }
-  .nav-links a{
-    text-decoration:none; color:var(--slate); font-size:0.8rem;
-    letter-spacing:0.03em; transition:color 0.2s;
-  }
+  .nav-logo .nav-mark{ font-family:var(--font-mono); color:var(--signal); font-size:0.72rem; letter-spacing:0.05em; }
+  .nav-right{ display:flex; align-items:center; gap:1rem; }
+  .nav-links{ display:flex; align-items:center; gap:2rem; }
+  .nav-links a{ text-decoration:none; color:var(--slate); font-size:0.8rem; letter-spacing:0.03em; transition:color 0.2s; }
   .nav-links a:hover{ color:var(--paper); }
   .nav-cta{
     font-family:var(--font-mono); font-size:0.72rem !important;
@@ -98,35 +107,50 @@
     border-radius:7px; color:var(--signal) !important;
     transition:background 0.2s, color 0.2s;
   }
-  .nav-cta:hover{ background:var(--signal); color:var(--ink) !important; }
-
+  .nav-cta:hover{ background:var(--signal); color:#08101f !important; }
+  .fun-toggle{
+    display:flex; align-items:center; gap:.5rem;
+    font-family:var(--font-pixel); font-size:.55rem; color:var(--slate);
+    background:var(--panel); border:1px solid var(--border); border-radius:99px;
+    padding:.5rem .8rem; cursor:pointer; transition:all .2s; white-space:nowrap;
+  }
+  .fun-toggle:hover{ border-color:var(--gold); color:var(--gold); }
+  .fun-toggle .led{ width:8px; height:8px; border-radius:50%; background:#333; transition:all .2s; }
+  body.fun-mode .fun-toggle{ border-color:var(--gold); color:var(--gold); }
+  body.fun-mode .fun-toggle .led{ background:var(--lime); box-shadow:0 0 8px var(--lime); }
+  .sound-toggle{
+    display:flex; align-items:center; gap:.5rem;
+    font-family:var(--font-pixel); font-size:.55rem; color:var(--slate);
+    background:var(--panel); border:1px solid var(--border); border-radius:99px;
+    padding:.5rem .8rem; cursor:pointer; transition:all .2s; white-space:nowrap;
+  }
+  .sound-toggle:hover{ border-color:var(--cyan); color:var(--cyan); }
+  .sound-toggle .led{ width:8px; height:8px; border-radius:50%; background:var(--cyan); box-shadow:0 0 8px var(--cyan); transition:all .2s; }
+  .sound-toggle.muted{ color:var(--slate-dim); }
+  .sound-toggle.muted .led{ background:#333; box-shadow:none; }
   .nav-toggle{
     display:none; background:none; border:none; color:var(--paper);
-    cursor:pointer; padding:0.4rem; width:34px; height:34px;
-    position:relative;
+    cursor:pointer; padding:0.4rem; width:34px; height:34px; position:relative;
   }
   .nav-toggle span, .nav-toggle::before, .nav-toggle::after{
     content:''; position:absolute; left:7px; right:7px; height:1.5px;
     background:currentColor; transition:transform 0.25s, opacity 0.25s;
   }
-  .nav-toggle::before{ top:11px; }
-  .nav-toggle span{ top:16.5px; }
-  .nav-toggle::after{ top:22px; }
+  .nav-toggle::before{ top:11px; } .nav-toggle span{ top:16.5px; } .nav-toggle::after{ top:22px; }
   .nav-toggle.open::before{ transform:translateY(5.5px) rotate(45deg); }
   .nav-toggle.open::after{ transform:translateY(-5.5px) rotate(-45deg); }
   .nav-toggle.open span{ opacity:0; }
 
   /* ---------- HERO ---------- */
-  #hero{
-    position:relative; min-height:100vh; z-index:1;
-    display:flex; align-items:center;
-    padding:6rem var(--pad-x) 4rem;
-    overflow:hidden;
-  }
+  #hero{ position:relative; min-height:100vh; z-index:1; display:flex; align-items:center; padding:7rem var(--pad-x) 4rem; overflow:hidden; }
   .hero-glow{
     position:absolute; top:-10%; left:12%; width:640px; height:640px;
     background:radial-gradient(circle, rgba(91,124,250,0.16) 0%, transparent 68%);
     filter:blur(10px); pointer-events:none; z-index:0;
+  }
+  .hero-glow.pink{
+    left:auto; right:-10%; top:auto; bottom:-20%;
+    background:radial-gradient(circle, rgba(255,93,162,0.10) 0%, transparent 68%);
   }
   .hero-graphic{
     position:absolute; right:-40px; top:50%; transform:translateY(-50%);
@@ -140,204 +164,250 @@
   @keyframes hgpulse{ 0%,100%{ r:7; opacity:1; } 50%{ r:9.5; opacity:0.7; } }
 
   .hero-inner{ position:relative; z-index:2; max-width:760px; }
+  .hud-row{ display:flex; gap:.7rem; flex-wrap:wrap; align-items:center; margin-bottom:1.4rem; }
   .status-pill{
     display:inline-flex; align-items:center; gap:0.55rem;
     font-family:var(--font-mono); font-size:0.72rem; letter-spacing:0.06em;
     color:var(--slate); border:1px solid var(--border); border-radius:99px;
-    padding:0.4rem 0.9rem 0.4rem 0.7rem; margin-bottom:2rem;
+    padding:0.4rem 0.9rem 0.4rem 0.7rem;
   }
-  .status-dot{
-    width:7px; height:7px; border-radius:50%; background:var(--verified);
-    box-shadow:0 0 0 0 rgba(110,231,183,0.5);
-    animation:statuspulse 2.2s ease-out infinite;
+  .status-dot{ width:7px; height:7px; border-radius:50%; background:var(--verified); box-shadow:0 0 0 0 rgba(110,231,183,0.5); animation:statuspulse 2.2s ease-out infinite; }
+  @keyframes statuspulse{ 0%{ box-shadow:0 0 0 0 rgba(110,231,183,0.45);} 70%{ box-shadow:0 0 0 6px rgba(110,231,183,0);} 100%{ box-shadow:0 0 0 0 rgba(110,231,183,0);} }
+  .pixel-tag{
+    font-family:var(--font-pixel); font-size:.55rem; letter-spacing:.04em;
+    padding:.55rem .8rem; border-radius:7px; border:1px dashed rgba(200,255,94,.4);
+    color:var(--lime); background:rgba(200,255,94,.06);
   }
-  @keyframes statuspulse{
-    0%{ box-shadow:0 0 0 0 rgba(110,231,183,0.45); }
-    70%{ box-shadow:0 0 0 6px rgba(110,231,183,0); }
-    100%{ box-shadow:0 0 0 0 rgba(110,231,183,0); }
-  }
-
   h1{
     font-family:var(--font-display); font-weight:600;
     font-size:clamp(3rem,8vw,5.6rem); line-height:0.98;
-    letter-spacing:-0.02em; margin-bottom:1.75rem;
+    letter-spacing:-0.02em; margin-bottom:1rem;
   }
-  h1 .last{ color:var(--signal); }
-
-  .hero-desc{
-    font-size:1.05rem; line-height:1.75; color:var(--slate);
-    max-width:520px; margin-bottom:2.5rem;
+  h1 .last{ color:var(--signal); position:relative; display:inline-block; }
+  body.fun-mode h1 .last{
+    background:linear-gradient(90deg,var(--signal),var(--cyan),var(--lime),var(--gold),var(--pink),var(--signal));
+    background-size:300% 100%; -webkit-background-clip:text; background-clip:text; color:transparent;
+    animation:rainbow 3s linear infinite;
   }
+  @keyframes rainbow{ to{ background-position:300% 0; } }
+  .typewrap{
+    font-family:var(--font-mono); font-size:.92rem; color:var(--lime);
+    background:rgba(200,255,94,.05); border:1px solid rgba(200,255,94,.18);
+    display:inline-flex; align-items:center; gap:.5rem;
+    padding:.6rem .95rem; border-radius:8px; margin-bottom:1.5rem; min-height:2.7em;
+  }
+  .typewrap .prompt{ color:var(--pink); }
+  .caret{ animation:blink 1s steps(1) infinite; color:var(--lime); }
+  @keyframes blink{ 50%{ opacity:0; } }
+  .hero-desc{ font-size:1.05rem; line-height:1.75; color:var(--slate); max-width:520px; margin-bottom:2rem; }
   .hero-desc strong{ color:var(--paper); font-weight:500; }
-
-  .hero-btns{ display:flex; gap:1rem; flex-wrap:wrap; }
+  .hero-btns{ display:flex; gap:1rem; flex-wrap:wrap; align-items:center; }
   .btn{
-    font-family:var(--font-body); font-weight:500; font-size:0.87rem;
-    padding:0.85rem 1.6rem; border-radius:8px; text-decoration:none;
-    display:inline-flex; align-items:center; gap:0.5rem;
-    transition:all 0.2s; border:1px solid transparent;
+    font-weight:500; font-size:0.87rem; padding:0.85rem 1.6rem; border-radius:8px;
+    text-decoration:none; display:inline-flex; align-items:center; gap:0.5rem;
+    transition:all 0.2s; border:1px solid transparent; cursor:pointer;
+    will-change:transform;
   }
-  .btn-primary{ background:var(--signal); color:#08101f; }
-  .btn-primary:hover{ background:#7b96ff; transform:translateY(-1px); }
-  .btn-outline{ border-color:var(--border); color:var(--paper); }
+  .btn-primary{ background:var(--signal); color:#08101f; box-shadow:0 0 0 rgba(91,124,250,0); }
+  .btn-primary:hover{ background:#7b96ff; transform:translateY(-2px); box-shadow:0 8px 30px rgba(91,124,250,.35); }
+  .btn-outline{ border-color:var(--border); color:var(--paper); background:transparent; }
   .btn-outline:hover{ border-color:var(--border-strong); background:var(--signal-soft); }
+  .coin-btn{
+    font-family:var(--font-pixel); font-size:.6rem; color:var(--gold);
+    background:transparent; border:1px dashed rgba(255,216,77,.45); border-radius:8px;
+    padding:.85rem 1.1rem; cursor:pointer; transition:all .2s;
+  }
+  .coin-btn:hover{ background:rgba(255,216,77,.1); transform:rotate(-2deg) scale(1.03); }
+  .xp-wrap{ margin-top:2.2rem; max-width:420px; }
+  .xp-label{ display:flex; justify-content:space-between; font-family:var(--font-mono); font-size:.68rem; color:var(--slate); margin-bottom:.45rem; letter-spacing:.06em; }
+  .xp-label b{ color:var(--gold); font-weight:600; }
+  .xp-bar{ height:8px; border-radius:99px; background:var(--panel-raised); border:1px solid var(--border); overflow:hidden; }
+  .xp-fill{ height:100%; width:0%; border-radius:99px; background:linear-gradient(90deg,var(--signal),var(--cyan),var(--lime)); transition:width 1.4s cubic-bezier(.2,.8,.2,1); }
+  .float-chip{
+    position:absolute; z-index:2; font-family:var(--font-mono); font-size:.7rem;
+    background:rgba(18,22,29,.9); border:1px solid var(--border); border-radius:9px;
+    padding:.55rem .8rem; color:var(--paper); backdrop-filter:blur(8px);
+    box-shadow:0 10px 30px rgba(0,0,0,.4); animation:floaty 5s ease-in-out infinite;
+    white-space:nowrap;
+  }
+  .float-chip small{ color:var(--verified); }
+  .float-chip.fc1{ right:8%; top:22%; animation-delay:0s; }
+  .float-chip.fc2{ right:22%; bottom:22%; animation-delay:1.4s; border-color:rgba(255,93,162,.35); }
+  .float-chip.fc3{ right:5%; bottom:38%; animation-delay:2.6s; border-color:rgba(200,255,94,.3); }
+  @keyframes floaty{ 0%,100%{ transform:translateY(0) rotate(-1deg);} 50%{ transform:translateY(-12px) rotate(1deg);} }
+  body.fun-mode .float-chip{ animation:floaty 2.2s ease-in-out infinite, wiggle .5s ease-in-out infinite alternate; }
+  @keyframes wiggle{ from{ rotate:-2deg; } to{ rotate:2deg; } }
 
-  /* ---------- SECTION HEADERS ---------- */
+  /* ---------- MARQUEE ---------- */
+  .marquee{
+    position:relative; z-index:1; border-top:1px solid var(--border); border-bottom:1px solid var(--border);
+    background:var(--panel); overflow:hidden; padding:.9rem 0; white-space:nowrap;
+  }
+  .marquee-track{ display:inline-flex; gap:2.5rem; padding-right:2.5rem; animation:scrollx 22s linear infinite; font-family:var(--font-pixel); font-size:.62rem; color:var(--slate); }
+  .marquee-track span b{ color:var(--lime); } .marquee-track span i{ color:var(--pink); font-style:normal; }
+  @keyframes scrollx{ to{ transform:translateX(-50%); } }
+
+  /* ---------- SECTIONS ---------- */
   .eyebrow{
-    font-family:var(--font-mono); font-size:0.72rem; letter-spacing:0.18em;
+    font-family:var(--font-pixel); font-size:.62rem; letter-spacing:.14em;
     text-transform:uppercase; color:var(--signal); margin-bottom:1rem;
+    display:flex; align-items:center; gap:.6rem;
   }
-  h2{
-    font-family:var(--font-display); font-weight:600;
-    font-size:clamp(1.9rem,3.4vw,2.75rem); line-height:1.15;
-    letter-spacing:-0.015em;
-  }
+  .eyebrow::before{ content:'▸'; color:var(--lime); }
+  h2{ font-family:var(--font-display); font-weight:600; font-size:clamp(1.9rem,3.4vw,2.75rem); line-height:1.15; letter-spacing:-0.015em; }
 
-  /* ---------- ABOUT ---------- */
-  #about{ position:relative; z-index:1; padding:6rem var(--pad-x) 7rem; }
-  .about-grid{
-    display:grid; grid-template-columns:1.5fr 1fr; gap:5rem;
-    margin-top:2.5rem;
-  }
+  #about{ position:relative; z-index:1; padding:6rem var(--pad-x) 5rem; }
+  .about-grid{ display:grid; grid-template-columns:1.5fr 1fr; gap:5rem; margin-top:2.5rem; }
   .about-copy p{ color:var(--slate); font-size:0.96rem; line-height:1.85; margin-bottom:1.2rem; max-width:52ch; }
   .about-copy h2{ margin-bottom:1.5rem; max-width:14ch; }
-
-  .skills-cloud{ margin-top:2.5rem; display:flex; flex-direction:column; gap:1.15rem; }
+  .power{ margin-top:2.2rem; display:flex; flex-direction:column; gap:1rem; max-width:520px; }
+  .power-row{ display:grid; grid-template-columns:150px 1fr 44px; gap:.9rem; align-items:center; font-family:var(--font-mono); font-size:.72rem; color:var(--slate); }
+  .power-track{ height:7px; background:var(--panel-raised); border:1px solid var(--border); border-radius:99px; overflow:hidden; }
+  .power-fill{ height:100%; width:0; border-radius:99px; background:linear-gradient(90deg,var(--signal),var(--cyan)); transition:width 1.2s cubic-bezier(.2,.8,.2,1); }
+  .skills-cloud{ margin-top:2rem; display:flex; flex-direction:column; gap:1.15rem; }
   .skill-group{ display:flex; gap:1.25rem; align-items:baseline; flex-wrap:wrap; }
-  .skill-cat{
-    font-family:var(--font-mono); font-size:0.68rem; letter-spacing:0.08em;
-    text-transform:uppercase; color:var(--slate-dim); width:132px; flex-shrink:0;
-  }
+  .skill-cat{ font-family:var(--font-mono); font-size:0.68rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--slate-dim); width:132px; flex-shrink:0; }
   .chip-row{ display:flex; flex-wrap:wrap; gap:0.5rem; }
   .chip{
     font-family:var(--font-mono); font-size:0.74rem; padding:0.32rem 0.7rem;
     border:1px solid var(--border); border-radius:6px; color:var(--paper);
-    background:var(--panel);
+    background:var(--panel); transition:all .18s; cursor:default;
   }
+  .chip:hover{ transform:translateY(-2px) rotate(-1deg); border-color:var(--lime); color:var(--lime); }
   .chip.on{ border-color:var(--border-strong); color:var(--signal); }
-
+  .chip.on:hover{ border-color:var(--pink); color:var(--pink); }
   .about-side{ display:flex; flex-direction:column; gap:1.75rem; }
   .stat-block{ border-left:2px solid var(--border); padding-left:1.25rem; }
   .stat-block.hi{ border-left-color:var(--signal); }
-  .stat-num{
-    font-family:var(--font-display); font-weight:600; font-size:2.75rem;
-    color:var(--paper); line-height:1;
-  }
+  .stat-num{ font-family:var(--font-display); font-weight:600; font-size:2.75rem; color:var(--paper); line-height:1; }
   .stat-label{ font-size:0.78rem; color:var(--slate); margin-top:0.4rem; line-height:1.5; max-width:26ch; }
-
-  .status-card{
-    background:var(--panel); border:1px solid var(--border); border-radius:10px;
-    padding:1.25rem 1.4rem; font-size:0.82rem; color:var(--slate); line-height:1.7;
-  }
+  .status-card{ background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:1.25rem 1.4rem; font-size:0.82rem; color:var(--slate); line-height:1.7; }
   .status-card b{ color:var(--paper); font-weight:500; }
 
   /* ---------- PROJECTS ---------- */
-  #projects{ position:relative; z-index:1; padding:6rem var(--pad-x) 7rem; }
-  .section-head{ margin-bottom:3rem; }
-
+  #projects{ position:relative; z-index:1; padding:5rem var(--pad-x) 6rem; }
+  .section-head{ margin-bottom:2.5rem; display:flex; align-items:end; justify-content:space-between; gap:1rem; flex-wrap:wrap; }
+  .hint{ font-family:var(--font-mono); font-size:.72rem; color:var(--slate-dim); }
+  .hint kbd{ font-family:var(--font-mono); border:1px solid var(--border); border-radius:5px; padding:.1rem .4rem; color:var(--gold); background:var(--panel); }
   .project{
     background:var(--panel); border:1px solid var(--border); border-radius:14px;
     padding:2.5rem; margin-bottom:1.75rem; position:relative;
-    transition:border-color 0.25s, transform 0.25s;
+    transition:border-color 0.25s, transform 0.15s ease-out;
+    transform-style:preserve-3d; overflow:hidden;
   }
-  .project:hover{ border-color:var(--border-strong); transform:translateY(-3px); }
-
-  .project-feature{
-    display:grid; grid-template-columns:1.1fr 1fr; gap:3rem; align-items:start;
+  .project::after{
+    content:''; position:absolute; inset:0; opacity:0; transition:opacity .25s; pointer-events:none;
+    background:radial-gradient(500px circle at var(--mx,50%) var(--my,50%), rgba(91,124,250,.14), transparent 60%);
   }
-  .project-corner{
-    position:absolute; width:22px; height:22px;
-    border-top:1px solid var(--border-strong); border-left:1px solid var(--border-strong);
-    top:14px; left:14px; opacity:0.6;
+  .project:hover::after{ opacity:1; }
+  .project:hover{ border-color:var(--border-strong); }
+  body.fun-mode .project:hover{ border-color:var(--lime); }
+  .project-feature{ display:grid; grid-template-columns:1.1fr 1fr; gap:3rem; align-items:start; }
+  .project-corner{ position:absolute; width:22px; height:22px; border-top:1px solid var(--border-strong); border-left:1px solid var(--border-strong); top:14px; left:14px; opacity:0.6; }
+  .project-corner.br{ border-top:none; border-left:none; border-bottom:1px solid var(--border-strong); border-right:1px solid var(--border-strong); top:auto; left:auto; bottom:14px; right:14px; }
+  .boss-tag{
+    display:inline-flex; align-items:center; gap:.5rem;
+    font-family:var(--font-pixel); font-size:.55rem; color:var(--gold);
+    border:1px solid rgba(255,216,77,.35); background:rgba(255,216,77,.07);
+    padding:.5rem .7rem; border-radius:7px; margin-bottom:1rem;
   }
-  .project-corner.br{
-    border-top:none; border-left:none;
-    border-bottom:1px solid var(--border-strong); border-right:1px solid var(--border-strong);
-    top:auto; left:auto; bottom:14px; right:14px;
-  }
-
-  .project-name{
-    font-family:var(--font-display); font-weight:600; font-size:1.65rem;
-    letter-spacing:-0.01em; margin-bottom:0.35rem;
-  }
+  .project-name{ font-family:var(--font-display); font-weight:600; font-size:1.65rem; letter-spacing:-0.01em; margin-bottom:0.35rem; }
   .project-tagline{ color:var(--slate); font-size:0.85rem; margin-bottom:1.1rem; }
-  .manifest{
-    font-family:var(--font-mono); font-size:0.72rem; letter-spacing:0.02em;
-    color:var(--slate); background:var(--panel-raised); border:1px solid var(--border);
-    border-radius:6px; padding:0.6rem 0.85rem; margin-bottom:1.35rem; display:inline-block;
-  }
+  .manifest{ font-family:var(--font-mono); font-size:0.72rem; letter-spacing:0.02em; color:var(--slate); background:var(--panel-raised); border:1px solid var(--border); border-radius:6px; padding:0.6rem 0.85rem; margin-bottom:1rem; display:inline-block; }
   .manifest .pfx{ color:var(--signal); }
-
+  .pstats{ display:flex; gap:.5rem; flex-wrap:wrap; margin-bottom:1.2rem; }
+  .pstat{ font-family:var(--font-mono); font-size:.68rem; padding:.35rem .65rem; border-radius:99px; border:1px solid var(--border); color:var(--slate); background:rgba(255,255,255,.02); }
+  .pstat b{ color:var(--lime); font-weight:600; } .pstat.pink b{ color:var(--pink); } .pstat.gold b{ color:var(--gold); }
   .project-desc{ color:var(--slate); font-size:0.88rem; line-height:1.8; margin-bottom:1.5rem; max-width:48ch; }
-
   .project-links{ display:flex; gap:0.85rem; flex-wrap:wrap; }
-  .plink{
-    text-decoration:none; font-size:0.78rem; font-weight:500;
-    display:inline-flex; align-items:center; gap:0.4rem;
-    padding:0.6rem 1.05rem; border-radius:7px; border:1px solid var(--border);
-    color:var(--paper); transition:all 0.2s;
-  }
-  .plink:hover{ border-color:var(--border-strong); }
+  .plink{ text-decoration:none; font-size:0.78rem; font-weight:500; display:inline-flex; align-items:center; gap:0.4rem; padding:0.6rem 1.05rem; border-radius:7px; border:1px solid var(--border); color:var(--paper); transition:all 0.2s; }
+  .plink:hover{ border-color:var(--border-strong); transform:translateY(-1px); }
   .plink.primary{ background:var(--signal); color:#08101f; border-color:var(--signal); }
   .plink.primary:hover{ background:#7b96ff; }
-
   .feature-list{ display:flex; flex-direction:column; gap:0.85rem; }
-  .feature-list li{
-    display:flex; gap:0.65rem; font-size:0.83rem; color:var(--slate); line-height:1.65;
-  }
+  .feature-list li{ display:flex; gap:0.65rem; font-size:0.83rem; color:var(--slate); line-height:1.65; }
   .feature-list li::before{ content:'—'; color:var(--signal); flex-shrink:0; }
-
   .projects-row{ display:grid; grid-template-columns:1fr 1fr; gap:1.75rem; margin-bottom:1.75rem; }
   .project-compact .project-name{ font-size:1.3rem; }
-
-  .more-repos{
-    display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;
-    border:1px dashed var(--border); border-radius:12px; padding:1.5rem 2rem;
-    color:var(--slate); font-size:0.88rem;
-  }
+  .more-repos{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; border:1px dashed var(--border); border-radius:12px; padding:1.5rem 2rem; color:var(--slate); font-size:0.88rem; }
   .more-repos a{ color:var(--signal); text-decoration:none; font-weight:500; white-space:nowrap; }
   .more-repos a:hover{ text-decoration:underline; }
 
-  /* ---------- CONTACT ---------- */
-  #contact{
-    position:relative; z-index:1; padding:7rem var(--pad-x);
-    border-top:1px solid var(--border); text-align:center;
-  }
-  .contact-heading{
-    font-family:var(--font-display); font-weight:600;
-    font-size:clamp(2.2rem,5vw,3.75rem); line-height:1.1; letter-spacing:-0.02em;
-    margin-bottom:1.5rem; max-width:16ch; margin-left:auto; margin-right:auto;
-  }
-  .contact-sub{ color:var(--slate); font-size:0.95rem; max-width:440px; margin:0 auto 2.75rem; line-height:1.8; }
+  /* ---------- PLAYGROUND ---------- */
+  #playground{ position:relative; z-index:1; padding:5rem var(--pad-x) 6rem; border-top:1px solid var(--border); background:linear-gradient(180deg, transparent, rgba(91,124,250,.04)); }
+  .play-grid{ display:grid; grid-template-columns:1.2fr .8fr; gap:1.5rem; margin-top:2.5rem; }
+  .play-card{ background:var(--panel); border:1px solid var(--border); border-radius:14px; overflow:hidden; transition:border-color .2s, transform .2s; }
+  .play-card:hover{ border-color:var(--border-strong); }
+  .play-head{ display:flex; align-items:center; justify-content:space-between; gap:1rem; padding:1rem 1.3rem; border-bottom:1px solid var(--border); background:var(--panel-raised); }
+  .play-head h3{ font-family:var(--font-pixel); font-size:.62rem; letter-spacing:.06em; color:var(--paper); }
+  .play-head .dots{ display:flex; gap:.4rem; } .play-head .dots i{ width:10px; height:10px; border-radius:50%; display:block; }
+  .play-body{ padding:1.4rem 1.3rem; }
+  .play-body p.small{ font-size:.82rem; color:var(--slate); line-height:1.7; margin-bottom:1rem; }
+  .term-out{ font-family:var(--font-mono); font-size:.78rem; line-height:1.7; min-height:220px; max-height:300px; overflow-y:auto; margin-bottom:1rem; }
+  .term-out .line{ margin-bottom:.25rem; } .term-out .u{ color:var(--lime); } .term-out .s{ color:var(--signal); } .term-out .dim{ color:var(--slate-dim); } .term-out .gold{ color:var(--gold); } .term-out .pink{ color:var(--pink); }
+  .term-input-row{ display:flex; align-items:center; gap:.6rem; font-family:var(--font-mono); font-size:.8rem; border:1px solid var(--border); border-radius:8px; padding:.7rem .9rem; background:#0d1117; }
+  .term-input-row span{ color:var(--pink); white-space:nowrap; }
+  .term-input-row input{ flex:1; background:none; border:none; color:var(--paper); font-family:var(--font-mono); font-size:.8rem; outline:none; }
+  .poll-opt{ display:block; width:100%; text-align:left; font-size:.83rem; padding:.75rem .95rem; margin-bottom:.6rem; border-radius:9px; border:1px solid var(--border); background:var(--panel-raised); color:var(--paper); cursor:pointer; transition:all .18s; position:relative; overflow:hidden; }
+  .poll-opt:hover:not(:disabled){ border-color:var(--lime); transform:translateX(3px); }
+  .poll-opt:disabled{ cursor:default; }
+  .poll-opt .bar{ position:absolute; inset:0; width:0%; background:rgba(91,124,250,.18); transition:width 1s cubic-bezier(.2,.8,.2,1); }
+  .poll-opt .inner{ position:relative; display:flex; justify-content:space-between; gap:.8rem; }
+  .poll-opt.voted{ border-color:var(--lime); } .poll-opt.voted .bar{ background:rgba(200,255,94,.15); }
+  .poll-meta{ font-family:var(--font-mono); font-size:.7rem; color:var(--slate-dim); margin-top:.8rem; display:flex; justify-content:space-between; gap:.8rem; flex-wrap:wrap; }
+  .poll-meta button{ background:none; border:none; color:var(--slate); font-family:var(--font-mono); font-size:.7rem; cursor:pointer; text-decoration:underline; }
+  .jwt-input{ width:100%; min-height:84px; resize:vertical; font-family:var(--font-mono); font-size:.72rem; color:var(--paper); background:#0d1117; border:1px solid var(--border); border-radius:8px; padding:.8rem; margin-bottom:.8rem; }
+  .jwt-row{ display:flex; gap:.6rem; flex-wrap:wrap; margin-bottom:.9rem; }
+  .mini-btn{ font-family:var(--font-mono); font-size:.72rem; padding:.55rem .9rem; border-radius:7px; border:1px solid var(--border); background:var(--panel-raised); color:var(--paper); cursor:pointer; transition:all .18s; }
+  .mini-btn:hover{ border-color:var(--signal); color:var(--signal); }
+  .mini-btn.primary{ background:var(--lime); border-color:var(--lime); color:#0a0d12; font-weight:600; }
+  .mini-btn.primary:hover{ filter:brightness(1.1); color:#0a0d12; }
+  .jwt-out{ display:grid; grid-template-columns:1fr 1fr; gap:.7rem; }
+  .jwt-out pre{ font-family:var(--font-mono); font-size:.68rem; line-height:1.6; background:#0d1117; border:1px solid var(--border); border-radius:8px; padding:.8rem; overflow-x:auto; color:var(--slate); white-space:pre-wrap; word-break:break-word; }
+  .jwt-out pre b{ color:var(--cyan); display:block; margin-bottom:.4rem; font-size:.65rem; letter-spacing:.08em; }
 
+  /* ---------- CONTACT ---------- */
+  #contact{ position:relative; z-index:1; padding:7rem var(--pad-x); border-top:1px solid var(--border); text-align:center; }
+  .contact-heading{ font-family:var(--font-display); font-weight:600; font-size:clamp(2.2rem,5vw,3.75rem); line-height:1.1; letter-spacing:-0.02em; margin-bottom:1.5rem; max-width:16ch; margin-left:auto; margin-right:auto; }
+  .contact-sub{ color:var(--slate); font-size:0.95rem; max-width:440px; margin:0 auto 2rem; line-height:1.8; }
   .social-links{ display:flex; justify-content:center; gap:1rem; flex-wrap:wrap; }
-  .social-link{
-    display:flex; align-items:center; gap:0.55rem;
-    padding:0.85rem 1.5rem; font-size:0.85rem; font-weight:500;
-    text-decoration:none; color:var(--paper);
-    border:1px solid var(--border); border-radius:9px;
-    transition:all 0.2s;
-  }
-  .social-link:hover{ border-color:var(--border-strong); background:var(--signal-soft); color:var(--signal); }
+  .social-link{ display:flex; align-items:center; gap:0.55rem; padding:0.85rem 1.5rem; font-size:0.85rem; font-weight:500; text-decoration:none; color:var(--paper); border:1px solid var(--border); border-radius:9px; transition:all 0.2s; background:var(--panel); }
+  .social-link:hover{ border-color:var(--border-strong); background:var(--signal-soft); color:var(--signal); transform:translateY(-2px); }
   .social-link.primary{ background:var(--signal); color:#08101f; border-color:var(--signal); }
   .social-link.primary:hover{ background:#7b96ff; color:#08101f; }
+  .copy-note{ margin-top:1.2rem; font-family:var(--font-mono); font-size:.72rem; color:var(--slate-dim); }
+  .copy-note button{ background:none; border:none; color:var(--gold); font-family:var(--font-mono); font-size:.72rem; cursor:pointer; text-decoration:underline; }
 
-  /* ---------- FOOTER ---------- */
-  footer{
-    position:relative; z-index:1; padding:1.75rem var(--pad-x);
-    border-top:1px solid var(--border);
-    display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.75rem;
-  }
+  footer{ position:relative; z-index:1; padding:1.75rem var(--pad-x); border-top:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.75rem; }
   .footer-copy{ font-size:0.75rem; color:var(--slate-dim); }
-  .footer-meta{ font-size:0.75rem; color:var(--slate-dim); display:flex; gap:1.25rem; flex-wrap:wrap; }
-  .footer-meta a{ color:var(--slate); text-decoration:none; }
-  .footer-meta a:hover{ color:var(--signal); }
+  .footer-meta{ font-size:0.75rem; color:var(--slate-dim); display:flex; gap:1.25rem; flex-wrap:wrap; align-items:center; }
+  .footer-meta a{ color:var(--slate); text-decoration:none; } .footer-meta a:hover{ color:var(--signal); }
+  #jokeBtn{ background:var(--panel); border:1px solid var(--border); color:var(--slate); border-radius:99px; padding:.35rem .8rem; font-family:var(--font-mono); font-size:.7rem; cursor:pointer; transition:all .2s; }
+  #jokeBtn:hover{ border-color:var(--pink); color:var(--pink); transform:rotate(-2deg); }
 
-  /* ---------- REVEAL ---------- */
+  /* ---------- TOASTS / CONFETTI ---------- */
+  #toasts{ position:fixed; right:1.2rem; bottom:1.2rem; z-index:400; display:flex; flex-direction:column; gap:.7rem; max-width:min(340px,90vw); }
+  .toast{
+    display:flex; gap:.8rem; align-items:flex-start;
+    background:rgba(18,22,29,.96); border:1px solid var(--gold); border-radius:12px;
+    padding:.9rem 1rem; box-shadow:0 12px 40px rgba(0,0,0,.5);
+    animation:toastin .35s cubic-bezier(.2,.9,.3,1.2); backdrop-filter:blur(10px);
+  }
+  .toast.out{ animation:toastout .3s ease forwards; }
+  @keyframes toastin{ from{ transform:translateY(20px) scale(.95); opacity:0; } }
+  @keyframes toastout{ to{ transform:translateY(10px); opacity:0; } }
+  .toast .icon{ font-size:1.2rem; line-height:1; }
+  .toast b{ display:block; font-family:var(--font-pixel); font-size:.58rem; color:var(--gold); margin-bottom:.3rem; letter-spacing:.04em; }
+  .toast span{ font-size:.78rem; color:var(--slate); line-height:1.5; }
+  #confetti{ position:fixed; inset:0; pointer-events:none; z-index:350; }
+
   .reveal{ opacity:0; transform:translateY(24px); transition:opacity 0.6s ease, transform 0.6s ease; }
   .reveal.in{ opacity:1; transform:translateY(0); }
 
-  /* ---------- RESPONSIVE ---------- */
+  @media (max-width:1020px){
+    .float-chip{ display:none; }
+    .play-grid{ grid-template-columns:1fr; }
+  }
   @media (max-width:900px){
     .nav-links{
       position:fixed; top:64px; left:0; right:0; z-index:99;
@@ -351,37 +421,44 @@
     .nav-links a{ padding:0.75rem 0; width:100%; border-bottom:1px solid var(--border); }
     .nav-cta{ margin-top:0.5rem; text-align:center; }
     .nav-toggle{ display:block; }
-
+    .fun-toggle, .sound-toggle{ font-size:.5rem; }
     .hero-graphic{ display:none; }
     #hero{ padding:6.5rem var(--pad-x) 3.5rem; min-height:auto; }
-
     .about-grid{ grid-template-columns:1fr; gap:3rem; }
-    .skill-group{ flex-direction:column; gap:0.6rem; }
-    .skill-cat{ width:auto; }
-
+    .skill-group{ flex-direction:column; gap:0.6rem; } .skill-cat{ width:auto; }
     .project-feature{ grid-template-columns:1fr; gap:1.75rem; }
     .projects-row{ grid-template-columns:1fr; }
     .project{ padding:1.85rem; }
-
+    .jwt-out{ grid-template-columns:1fr; }
     footer{ flex-direction:column; text-align:center; }
   }
 </style>
 </head>
 <body>
 
+<div id="hpbar"></div>
+<div id="cursor-dot"></div><div id="cursor-ring"></div>
+<canvas id="confetti"></canvas>
+<div id="toasts" aria-live="polite"></div>
+
 <nav>
   <a href="#hero" class="nav-logo">Rushil Gorasia <span class="nav-mark">// axemoth</span></a>
-  <ul class="nav-links" id="navLinks">
-    <li><a href="#about">About</a></li>
-    <li><a href="#projects">Projects</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><a href="https://github.com/Axemoth" target="_blank" rel="noopener" class="nav-cta">GitHub ↗</a></li>
-  </ul>
-  <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false"><span></span></button>
+  <div class="nav-right">
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#about">About</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#playground">Playground</a></li>
+      <li><a href="#contact">Contact</a></li>
+      <li><a href="https://github.com/Axemoth" target="_blank" rel="noopener" class="nav-cta">GitHub ↗</a></li>
+    </ul>
+    <button class="fun-toggle" id="funToggle" aria-pressed="false" title="Toggle fun mode"><span class="led"></span> FUN: OFF</button>
+    <button class="sound-toggle" id="soundToggle" aria-pressed="true" title="Toggle sound effects"><span class="led"></span> SOUND: ON</button>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false"><span></span></button>
+  </div>
 </nav>
 
 <section id="hero">
-  <div class="hero-glow"></div>
+  <div class="hero-glow"></div><div class="hero-glow pink"></div>
   <svg class="hero-graphic" viewBox="0 0 480 480" aria-hidden="true">
     <g class="hg-lines">
       <line x1="60" y1="380" x2="220" y2="240"/>
@@ -402,18 +479,37 @@
     </g>
   </svg>
 
+  <div class="float-chip fc1">🔐 RS256 <small>verified ✓</small></div>
+  <div class="float-chip fc2">⚡ pgvector <small>&lt;100ms</small></div>
+  <div class="float-chip fc3">🤖 copilot <small>online</small></div>
+
   <div class="hero-inner">
-    <div class="status-pill reveal"><span class="status-dot"></span> Open to full-stack engineering roles</div>
+    <div class="hud-row reveal">
+      <div class="status-pill"><span class="status-dot"></span> Open to full-stack engineering roles</div>
+      <div class="pixel-tag">▶ PLAYER 1 READY</div>
+    </div>
     <h1 class="reveal">Rushil <span class="last">Gorasia</span></h1>
+    <div class="reveal"><div class="typewrap"><span class="prompt">&gt;</span><span id="typed"></span><span class="caret">▌</span></div></div>
     <p class="hero-desc reveal">
       I build the infrastructure other features stand on: <strong>identity systems, real-time pipelines, and AI-native products</strong>, engineered from spec to production — not stitched together from someone else's SDK.
     </p>
     <div class="hero-btns reveal">
-      <a href="#projects" class="btn btn-primary">View Projects</a>
-      <a href="mailto:Rushil.gorasia@gmail.com" class="btn btn-outline">Get in Touch</a>
+      <a href="#projects" class="btn btn-primary magnetic">View Projects ↓</a>
+      <a href="mailto:Rushil.gorasia@gmail.com" class="btn btn-outline magnetic">Get in Touch</a>
+      <button class="coin-btn magnetic" id="coinBtn" title="You know you want to press it">🪙 INSERT COIN</button>
+    </div>
+    <div class="xp-wrap reveal">
+      <div class="xp-label"><span>LVL 4 — SHIPPED PRODUCTS</span><b id="xpPct">0%</b></div>
+      <div class="xp-bar"><div class="xp-fill" id="xpFill"></div></div>
     </div>
   </div>
 </section>
+
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track" id="marqueeTrack">
+    <span>BUILDS PRIMITIVES <b>✦</b></span><span>NO SDK SHORTCUTS <i>♥</i></span><span>AUTH FROM RFCs <b>✦</b></span><span>REALTIME OR BUST <i>♥</i></span><span>AI THAT SURVIVES PROD <b>✦</b></span><span>PRESS <b>B</b> FOR CONFETTI <i>♥</i></span>
+  </div>
+</div>
 
 <section id="about">
   <div class="eyebrow reveal">About</div>
@@ -422,6 +518,14 @@
       <h2 class="reveal">I'd rather build the primitive than import it.</h2>
       <p class="reveal">Most of my work starts by asking what's actually happening underneath an abstraction I'm about to reach for — which is how a hackathon polling app turned into real-time state management at speed, and a "Sign in" button turned into implementing the OpenID Connect Authorization Code flow, PKCE, and RS256 token signing from the specification up.</p>
       <p class="reveal">Lately that same instinct has moved toward AI-native products: agentic copilots, semantic search over vector embeddings, and the retrieval, billing, and multi-tenant infrastructure that turn a demo into something people can actually rely on.</p>
+
+      <div class="power reveal">
+        <div class="power-row"><span>Auth & Security</span><div class="power-track"><div class="power-fill" data-w="99"></div></div><span>99</span></div>
+        <div class="power-row"><span>Backend / APIs</span><div class="power-track"><div class="power-fill" data-w="92"></div></div><span>92</span></div>
+        <div class="power-row"><span>Realtime systems</span><div class="power-track"><div class="power-fill" data-w="88"></div></div><span>88</span></div>
+        <div class="power-row"><span>AI infra / RAG</span><div class="power-track"><div class="power-fill" data-w="85"></div></div><span>85</span></div>
+        <div class="power-row"><span>Frontend</span><div class="power-track"><div class="power-fill" data-w="90"></div></div><span>90</span></div>
+      </div>
 
       <div class="skills-cloud reveal">
         <div class="skill-group">
@@ -459,20 +563,20 @@
 
     <aside class="about-side">
       <div class="stat-block hi reveal">
-        <div class="stat-num">4</div>
+        <div class="stat-num" data-count="4">0</div>
         <div class="stat-label">Full-stack products designed, built, and shipped end to end</div>
       </div>
       <div class="stat-block reveal">
-        <div class="stat-num">5</div>
+        <div class="stat-num" data-count="5">0</div>
         <div class="stat-label">Auth standards implemented — OpenID Connect, OAuth 2.0, PKCE, RS256, JWT</div>
       </div>
       <div class="stat-block reveal">
-        <div class="stat-num">9</div>
+        <div class="stat-num" data-count="9">0</div>
         <div class="stat-label">Field types in AxeForm's validation engine, each with cycle-safe conditional logic</div>
       </div>
       <div class="status-card reveal">
         <b>Currently</b> — B.Tech in Computer Engineering, Marwadi University, Rajkot.<br/>
-        Based in Rajkot, India.
+        Based in Rajkot, India. Best reached by email. Fastest response time in the west (probably).
       </div>
     </aside>
   </div>
@@ -480,19 +584,28 @@
 
 <section id="projects">
   <div class="section-head">
-    <div class="eyebrow reveal">Selected Work</div>
-    <h2 class="reveal">Projects</h2>
+    <div>
+      <div class="eyebrow reveal">Selected Work</div>
+      <h2 class="reveal">Boss fights I've won.</h2>
+    </div>
+    <div class="hint reveal">tip: hover cards for spotlight · press <kbd>B</kbd> for confetti · try <kbd>↑↑↓↓←→←→BA</kbd></div>
   </div>
 
-  <div class="project project-feature reveal">
+  <div class="project project-feature reveal" data-tilt>
     <span class="project-corner"></span><span class="project-corner br"></span>
     <div>
+      <div class="boss-tag">★ BOSS 01 · AI WORKSPACE</div>
       <div class="project-name">Singularity</div>
       <div class="project-tagline">AI-powered Gmail &amp; Calendar workspace</div>
       <p class="manifest"><span class="pfx">STACK //</span> Next.js 15 · tRPC v11 · Mastra · pgvector/HNSW</p>
+      <div class="pstats">
+        <span class="pstat"><b>⚡</b> &lt;1s semantic search</span>
+        <span class="pstat pink"><b>🤖</b> 2-model fallback</span>
+        <span class="pstat gold"><b>🔐</b> 3 accounts / user</span>
+      </div>
       <p class="project-desc">A multi-tenant workspace that unifies Gmail and Calendar across up to three accounts per user, with an agentic AI copilot handling triage, drafting, and bulk actions — backed by a multi-model fallback chain so it keeps working even when one provider doesn't.</p>
       <div class="project-links">
-        <a href="https://singularity.axemoth.com/" target="_blank" rel="noopener" class="plink primary">Live Demo ↗</a>
+        <a href="https://singularity.axemoth.com/" target="_blank" rel="noopener" class="plink primary" data-ach="curious">Live Demo ↗</a>
         <a href="https://github.com/Axemoth/Singularity" target="_blank" rel="noopener" class="plink">Source ↗</a>
       </div>
     </div>
@@ -507,15 +620,21 @@
     </div>
   </div>
 
-  <div class="project project-feature reveal">
+  <div class="project project-feature reveal" data-tilt>
     <span class="project-corner"></span><span class="project-corner br"></span>
     <div>
+      <div class="boss-tag">★ BOSS 02 · CRYPTOGRAPHY</div>
       <div class="project-name">Axemoth OIDC</div>
       <div class="project-tagline">Self-hosted OpenID Connect identity provider</div>
       <p class="manifest"><span class="pfx">PROTOCOL //</span> OAuth 2.0 · OIDC Core 1.0 · PKCE (RFC 7636) · RS256</p>
-      <p class="project-desc">A production-grade, self-hosted identity provider and SSO platform — a private "Sign in with Google," built from the specification up with no shortcuts on the cryptography.</p>
+      <div class="pstats">
+        <span class="pstat"><b>🛡</b> PKCE enforced</span>
+        <span class="pstat pink"><b>🔑</b> RS256 signed</span>
+        <span class="pstat gold"><b>📜</b> spec-built, no shortcuts</span>
+      </div>
+      <p class="project-desc">A production-grade, self-hosted identity provider and SSO platform — a private "Sign in with Google," built from the specification up with no shortcuts on the cryptography. Scroll down to decode a JWT live in the playground.</p>
       <div class="project-links">
-        <a href="https://oidc.axemoth.com/" target="_blank" rel="noopener" class="plink primary">Live Demo ↗</a>
+        <a href="https://oidc.axemoth.com/" target="_blank" rel="noopener" class="plink primary" data-ach="curious">Live Demo ↗</a>
         <a href="https://github.com/Axemoth/OIDC" target="_blank" rel="noopener" class="plink">Source ↗</a>
       </div>
     </div>
@@ -531,70 +650,158 @@
   </div>
 
   <div class="projects-row">
-    <div class="project project-compact reveal">
+    <div class="project project-compact reveal" data-tilt>
+      <div class="boss-tag">★ MINI-BOSS · FORMS</div>
       <div class="project-name">AxeForm</div>
       <div class="project-tagline">Full-stack SaaS form builder</div>
       <p class="manifest"><span class="pfx">STACK //</span> Next.js · tRPC · Drizzle ORM · Turborepo</p>
       <p class="project-desc">A form builder shipped as a pnpm/Turborepo monorepo, supporting nine field types with dynamic Zod validation, conditional logic, and DFS-based cycle detection so validation graphs can't loop forever.</p>
       <div class="project-links">
-        <a href="https://axeform.axemoth.com/" target="_blank" rel="noopener" class="plink primary">Live ↗</a>
+        <a href="https://axeform.axemoth.com/" target="_blank" rel="noopener" class="plink primary" data-ach="curious">Live ↗</a>
         <a href="https://github.com/Axemoth/Form-Builder" target="_blank" rel="noopener" class="plink">Source ↗</a>
       </div>
     </div>
-    <div class="project project-compact reveal">
+    <div class="project project-compact reveal" data-tilt>
+      <div class="boss-tag">★ MINI-BOSS · REALTIME</div>
       <div class="project-name">AxePoll</div>
       <div class="project-tagline">Real-time polling application</div>
       <p class="manifest"><span class="pfx">STACK //</span> JavaScript · WebSockets</p>
-      <p class="project-desc">Live polling and voting with WebSocket-driven state — results update instantly for every participant, with clean handling of concurrent votes on both desktop and mobile.</p>
+      <p class="project-desc">Live polling and voting with WebSocket-driven state — results update instantly for every participant, with clean handling of concurrent votes on both desktop and mobile. Try a demo poll in the playground ↓</p>
       <div class="project-links">
-        <a href="https://axepoll.axemoth.com/" target="_blank" rel="noopener" class="plink primary">Live ↗</a>
+        <a href="https://axepoll.axemoth.com/" target="_blank" rel="noopener" class="plink primary" data-ach="curious">Live ↗</a>
         <a href="https://github.com/Axemoth/Polling" target="_blank" rel="noopener" class="plink">Source ↗</a>
       </div>
     </div>
   </div>
 
   <div class="more-repos reveal">
-    <span>A few smaller builds and experiments live in the rest of my repos.</span>
+    <span>🕹️ A few smaller builds and experiments live in the rest of my repos.</span>
     <a href="https://github.com/Axemoth" target="_blank" rel="noopener">Explore GitHub ↗</a>
   </div>
 </section>
 
+<section id="playground">
+  <div class="eyebrow reveal">Bonus Level</div>
+  <h2 class="reveal">Don't just read. Play.</h2>
+  <p class="reveal" style="color:var(--slate);margin-top:.8rem;max-width:60ch;font-size:.92rem;line-height:1.8;">Three tiny interactive demos from my actual work — a terminal, a live poll, and a JWT decoder. No installs, no tracking, all client-side.</p>
+
+  <div class="play-grid">
+    <div class="play-card reveal">
+      <div class="play-head"><h3>▸ rushil@axemoth: ~</h3><div class="dots"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i></div></div>
+      <div class="play-body">
+        <p class="small">A tiny fake shell. Try <code style="font-family:var(--font-mono);color:var(--lime)">help</code>, <code style="font-family:var(--font-mono);color:var(--lime)">whoami</code>, <code style="font-family:var(--font-mono);color:var(--lime)">projects</code>, or <code style="font-family:var(--font-mono);color:var(--lime)">sudo hire rushil</code>.</p>
+        <div class="term-out" id="termOut" aria-live="polite"></div>
+        <div class="term-input-row"><span>➜ ~</span><input id="termIn" type="text" placeholder="type a command + Enter" autocomplete="off" spellcheck="false" aria-label="Terminal input"/></div>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:1.5rem;">
+      <div class="play-card reveal">
+        <div class="play-head"><h3>▸ LIVE POLL (mini AxePoll)</h3><span style="font-family:var(--font-mono);font-size:.65rem;color:var(--verified)">● LIVE</span></div>
+        <div class="play-body">
+          <p class="small"><b style="color:var(--paper)">What should I build next?</b><br/>Vote below — results animate like the real AxePoll WebSocket flow (this one just uses localStorage).</p>
+          <div id="pollBox"></div>
+          <div class="poll-meta"><span id="pollTotal"></span><button id="pollReset">reset vote</button></div>
+        </div>
+      </div>
+
+      <div class="play-card reveal">
+        <div class="play-head"><h3>▸ JWT DECODER (OIDC edition)</h3><span style="font-family:var(--font-mono);font-size:.65rem;color:var(--gold)">RS256</span></div>
+        <div class="play-body">
+          <p class="small">Paste any JWT to inspect its header + payload. Nothing leaves your browser — which is exactly how auth debugging should work.</p>
+          <textarea class="jwt-input" id="jwtIn" placeholder="paste JWT here (xxx.yyy.zzz)" spellcheck="false"></textarea>
+          <div class="jwt-row">
+            <button class="mini-btn primary" id="jwtDecode">Decode →</button>
+            <button class="mini-btn" id="jwtSample">Try sample token</button>
+          </div>
+          <div class="jwt-out">
+            <pre id="jwtHeader"><b>HEADER</b>—</pre>
+            <pre id="jwtPayload"><b>PAYLOAD</b>—</pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section id="contact">
-  <div class="eyebrow reveal">Get in Touch</div>
+  <div class="eyebrow reveal" style="justify-content:center;">Get in Touch</div>
   <h2 class="contact-heading reveal">Let's talk about what you're building.</h2>
   <p class="contact-sub reveal">Open to full-stack roles, collaborations, and conversations about auth protocols, real-time systems, or AI infrastructure.</p>
   <div class="social-links reveal">
-    <a href="mailto:Rushil.gorasia@gmail.com" class="social-link primary">
+    <a href="mailto:Rushil.gorasia@gmail.com" class="social-link primary magnetic">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></svg>
       Email
     </a>
-    <a href="https://github.com/Axemoth" target="_blank" rel="noopener" class="social-link">
+    <a href="https://github.com/Axemoth" target="_blank" rel="noopener" class="social-link magnetic">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.387-1.333-1.756-1.333-1.756-1.09-.745.083-.73.083-.73 1.205.085 1.838 1.236 1.838 1.236 1.07 1.835 2.807 1.305 3.492.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 21.795 24 17.295 24 12c0-6.63-5.37-12-12-12"/></svg>
       GitHub
     </a>
-    <a href="https://x.com/Axemoth" target="_blank" rel="noopener" class="social-link">
+    <a href="https://x.com/Axemoth" target="_blank" rel="noopener" class="social-link magnetic">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
       X / Twitter
     </a>
   </div>
+  <div class="copy-note reveal">prefer copying? <button id="copyEmail">rushil.gorasia@gmail.com ⧉</button></div>
 </section>
 
 <footer>
-  <div class="footer-copy">© 2026 Rushil Gorasia</div>
+  <div class="footer-copy">© 2026 Rushil Gorasia · built with too much chai ☕</div>
   <div class="footer-meta">
     <span>Rajkot, India</span>
     <span>English · Hindi · Gujarati</span>
     <a href="https://github.com/Axemoth" target="_blank" rel="noopener">github.com/Axemoth</a>
+    <button id="jokeBtn" title="Important career advice">need a joke?</button>
   </div>
 </footer>
 
 <script type="module">
   import { inject } from 'https://cdn.jsdelivr.net/npm/@vercel/analytics@1/+esm';
-  inject();
+  try { inject(); } catch(e) {}
 </script>
 
 <script>
-  // Mobile nav toggle
+(function(){
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------- Sound engine (Web Audio, no assets) ---------- */
+  let soundOn = true;
+  try { soundOn = localStorage.getItem('axemoth-sound') !== 'off'; } catch {}
+  let actx = null;
+  function ensureCtx(){
+    if (actx) { if (actx.state === 'suspended') actx.resume(); return actx; }
+    try { actx = new (window.AudioContext || window.webkitAudioContext)(); } catch {}
+    return actx;
+  }
+  // unlock audio on first gesture (browser autoplay policy)
+  ['pointerdown','keydown'].forEach(ev => window.addEventListener(ev, () => { if (soundOn) ensureCtx(); }, {once:true, passive:true}));
+  function tone(freq, dur=0.12, type='square', vol=0.04, delay=0, slideTo=null){
+    if (!soundOn) return;
+    const ctx = ensureCtx(); if (!ctx) return;
+    const t = ctx.currentTime + delay;
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    o.type = type; o.frequency.setValueAtTime(freq, t);
+    if (slideTo) o.frequency.exponentialRampToValueAtTime(slideTo, t + dur);
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(vol, t + 0.012);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    o.connect(g); g.connect(ctx.destination);
+    o.start(t); o.stop(t + dur + 0.05);
+  }
+  const sfx = {
+    click(){ tone(660, 0.07, 'square', 0.03); },
+    key(){ tone(880 + Math.random()*220, 0.04, 'square', 0.015); },
+    coin(){ tone(988, 0.09, 'square', 0.05); tone(1319, 0.28, 'square', 0.05, 0.09); },
+    pop(){ tone(520, 0.08, 'square', 0.04, 0, 780); },
+    success(){ tone(523, 0.1, 'square', 0.04); tone(659, 0.1, 'square', 0.04, 0.09); tone(784, 0.18, 'square', 0.045, 0.18); },
+    error(){ tone(220, 0.16, 'sawtooth', 0.04, 0, 140); },
+    achievement(){ tone(659, 0.09, 'triangle', 0.05); tone(880, 0.09, 'triangle', 0.05, 0.08); tone(1175, 0.22, 'triangle', 0.055, 0.16); },
+    powerup(){ [523,659,784,1047,1319,1568].forEach((f,i) => tone(f, 0.11, 'square', 0.04, i*0.07)); },
+    toggle(on){ on ? tone(784, 0.1, 'square', 0.04, 0, 1175) : tone(392, 0.12, 'square', 0.035, 0, 262); },
+    joke(){ tone(392, 0.09, 'square', 0.035); tone(330, 0.09, 'square', 0.035, 0.09); tone(262, 0.16, 'square', 0.035, 0.18); },
+  };
+
+  /* ---------- Mobile nav ---------- */
   const navToggle = document.getElementById('navToggle');
   const navLinks = document.getElementById('navLinks');
   navToggle.addEventListener('click', () => {
@@ -608,17 +815,337 @@
     navToggle.setAttribute('aria-expanded', 'false');
   }));
 
-  // Scroll reveal
+  /* ---------- Scroll HP bar ---------- */
+  const hp = document.getElementById('hpbar');
+  const onScroll = () => {
+    const h = document.documentElement;
+    const pct = h.scrollTop / (h.scrollHeight - h.clientHeight || 1);
+    hp.style.width = (pct*100).toFixed(2) + '%';
+  };
+  window.addEventListener('scroll', onScroll, {passive:true}); onScroll();
+
+  /* ---------- Custom cursor ---------- */
+  const dot = document.getElementById('cursor-dot');
+  const ring = document.getElementById('cursor-ring');
+  let mx = -100, my = -100, rx = -100, ry = -100;
+  window.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    dot.style.left = mx+'px'; dot.style.top = my+'px';
+    if (document.body.classList.contains('fun-mode') && !reduced) spawnTrail(mx,my);
+  });
+  (function loop(){
+    rx += (mx-rx)*0.16; ry += (my-ry)*0.16;
+    ring.style.left = rx+'px'; ring.style.top = ry+'px';
+    requestAnimationFrame(loop);
+  })();
+  document.querySelectorAll('a,button,.chip,.poll-opt,input,textarea').forEach(el => {
+    el.addEventListener('mouseenter', () => ring.classList.add('hovering'));
+    el.addEventListener('mouseleave', () => ring.classList.remove('hovering'));
+  });
+
+  /* ---------- Typing rotator ---------- */
+  const phrases = [
+    'I build identity systems from RFCs.',
+    'I build realtime pipelines that survive prod.',
+    'I build AI copilots with fallback chains.',
+    'I build forms that can\'t infinite-loop.',
+    'I build primitives. Not wrappers.'
+  ];
+  const typedEl = document.getElementById('typed');
+  let pi = 0, ci = 0, deleting = false;
+  function tick(){
+    const full = phrases[pi];
+    ci += deleting ? -2 : 1;
+    if (ci <= 0) { ci = 0; deleting = false; pi = (pi+1)%phrases.length; }
+    if (ci >= full.length) { ci = full.length; deleting = true; setTimeout(tick, 1600); typedEl.textContent = full; return; }
+    typedEl.textContent = full.slice(0, ci);
+    setTimeout(tick, deleting ? 28 : 48);
+  }
+  if (!reduced) tick(); else typedEl.textContent = phrases[0];
+
+  /* ---------- Marquee duplicate for seamless loop ---------- */
+  const track = document.getElementById('marqueeTrack');
+  track.innerHTML += track.innerHTML;
+
+  /* ---------- Reveal + count-up + power bars + XP ---------- */
   const revealEls = document.querySelectorAll('.reveal');
   const io = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('in');
-        io.unobserve(entry.target);
-      }
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add('in');
+      entry.target.querySelectorAll('.power-fill').forEach(f => f.style.width = f.dataset.w + '%');
+      if (entry.target.classList.contains('power')) entry.target.querySelectorAll('.power-fill').forEach(f => f.style.width = f.dataset.w + '%');
+      io.unobserve(entry.target);
     });
   }, { threshold: 0.12 });
   revealEls.forEach(el => io.observe(el));
+  // power fills that are themselves revealed
+  const pio = new IntersectionObserver(es => es.forEach(e => {
+    if (e.isIntersecting) { e.target.style.width = e.target.dataset.w + '%'; pio.unobserve(e.target); }
+  }), {threshold:.4});
+  document.querySelectorAll('.power-fill').forEach(f => pio.observe(f));
+
+  // count-up stats
+  const cio = new IntersectionObserver(es => es.forEach(e => {
+    if (!e.isIntersecting) return;
+    const el = e.target, target = +el.dataset.count; let cur = 0;
+    const step = () => { cur += 1; el.textContent = cur; if (cur < target) setTimeout(step, 120); };
+    step(); cio.unobserve(el);
+  }), {threshold:.6});
+  document.querySelectorAll('[data-count]').forEach(el => cio.observe(el));
+
+  // XP bar
+  const xpFill = document.getElementById('xpFill'), xpPct = document.getElementById('xpPct');
+  setTimeout(() => { xpFill.style.width = '82%'; let p = 0; const t = setInterval(()=>{ p+=2; xpPct.textContent = Math.min(p,82)+'%'; if(p>=82) clearInterval(t); }, 24); }, 600);
+
+  /* ---------- Tilt + spotlight ---------- */
+  if (!reduced && matchMedia('(pointer:fine)').matches) {
+    document.querySelectorAll('[data-tilt]').forEach(card => {
+      card.addEventListener('mousemove', e => {
+        const r = card.getBoundingClientRect();
+        const x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
+        card.style.transform = `perspective(900px) rotateX(${(0.5-y)*5}deg) rotateY(${(x-0.5)*6}deg) translateY(-3px)`;
+        card.style.setProperty('--mx', (x*100)+'%');
+        card.style.setProperty('--my', (y*100)+'%');
+      });
+      card.addEventListener('mouseleave', () => { card.style.transform = ''; });
+    });
+  }
+
+  /* ---------- Magnetic buttons ---------- */
+  if (!reduced && matchMedia('(pointer:fine)').matches) {
+    document.querySelectorAll('.magnetic').forEach(btn => {
+      btn.addEventListener('mousemove', e => {
+        const r = btn.getBoundingClientRect();
+        const x = e.clientX - r.left - r.width/2, y = e.clientY - r.top - r.height/2;
+        btn.style.transform = `translate(${x*0.15}px, ${y*0.2}px)`;
+      });
+      btn.addEventListener('mouseleave', () => btn.style.transform = '');
+    });
+  }
+
+  /* ---------- Toasts + achievements ---------- */
+  const toasts = document.getElementById('toasts');
+  const unlocked = new Set();
+  function toast(title, msg, icon='🏆'){
+    const d = document.createElement('div');
+    d.className = 'toast';
+    d.innerHTML = `<div class="icon">${icon}</div><div><b>${title}</b><span>${msg}</span></div>`;
+    toasts.appendChild(d);
+    setTimeout(()=>{ d.classList.add('out'); setTimeout(()=>d.remove(), 320); }, 3800);
+  }
+  function unlock(id, title, msg, icon){
+    if (unlocked.has(id)) return; unlocked.add(id);
+    sfx.achievement();
+    toast('ACHIEVEMENT: ' + title, msg, icon);
+  }
+
+  /* ---------- Confetti (vanilla) ---------- */
+  const cv = document.getElementById('confetti'), ctx = cv.getContext('2d');
+  let parts = [], confettiRunning = false;
+  function sizeCanvas(){ cv.width = innerWidth; cv.height = innerHeight; }
+  sizeCanvas(); window.addEventListener('resize', sizeCanvas);
+  const COLORS = ['#5b7cfa','#6ee7ff','#c8ff5e','#ffd84d','#ff5da2','#6ee7b7'];
+  function burst(x, y, n=90){
+    if (reduced) return;
+    for (let i=0;i<n;i++){
+      parts.push({x, y, vx:(Math.random()-0.5)*11, vy:Math.random()*-9-2, g:0.32, s:Math.random()*7+3, r:Math.random()*Math.PI, vr:(Math.random()-0.5)*0.3, c:COLORS[i%COLORS.length], life:1});
+    }
+    if (!confettiRunning){ confettiRunning = true; requestAnimationFrame(confLoop); }
+  }
+  function confLoop(){
+    ctx.clearRect(0,0,cv.width,cv.height);
+    parts = parts.filter(p => p.life > 0 && p.y < cv.height + 30);
+    parts.forEach(p => {
+      p.x += p.vx; p.y += p.vy; p.vy += p.g; p.vx *= 0.99; p.r += p.vr; p.life -= 0.008;
+      ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.r); ctx.globalAlpha = Math.max(p.life,0);
+      ctx.fillStyle = p.c; ctx.fillRect(-p.s/2,-p.s/2,p.s,p.s*0.6); ctx.restore();
+    });
+    if (parts.length) requestAnimationFrame(confLoop);
+    else { confettiRunning = false; ctx.clearRect(0,0,cv.width,cv.height); }
+  }
+  function spawnTrail(x,y){
+    for (let i=0;i<2;i++) parts.push({x,y,vx:(Math.random()-0.5)*3,vy:Math.random()*-2-0.5,g:0.12,s:Math.random()*4+2,r:0,vr:0.1,c:COLORS[Math.floor(Math.random()*COLORS.length)],life:0.7});
+    if (!confettiRunning){ confettiRunning = true; requestAnimationFrame(confLoop); }
+  }
+
+  document.getElementById('coinBtn').addEventListener('click', e => {
+    sfx.coin();
+    burst(e.clientX || innerWidth/2, e.clientY || 300, 130);
+    unlock('coin','INSERT COIN','+1 life. Thanks for playing. Now go look at the projects.','🪙');
+  });
+  window.addEventListener('keydown', e => {
+    if (e.key.toLowerCase() === 'b' && !/INPUT|TEXTAREA/.test(document.activeElement.tagName)) {
+      sfx.pop();
+      burst(innerWidth/2, innerHeight/3, 120);
+      unlock('b','BUTTON MASHER','You found the B button. Classic.','🎮');
+    }
+  });
+  // Konami
+  const seq = ['arrowup','arrowup','arrowdown','arrowdown','arrowleft','arrowright','arrowleft','arrowright','b','a'];
+  let ki = 0;
+  window.addEventListener('keydown', e => {
+    const k = e.key.toLowerCase();
+    ki = (k === seq[ki]) ? ki+1 : (k === seq[0] ? 1 : 0);
+    if (ki === seq.length) {
+      ki = 0; burst(innerWidth/2, innerHeight/2, 220);
+      sfx.powerup();
+      document.body.classList.add('fun-mode'); syncFun();
+      unlock('konami','KONAMI MASTER','↑↑↓↓←→←→BA. Fun mode: ENGAGED.','👾');
+    }
+  });
+  document.querySelectorAll('[data-ach]').forEach(a => a.addEventListener('click', () => unlock('curious','CURIOUS CLICKER','You actually clicked through. Hiring managers love that.','🖱️')));
+
+  /* ---------- Fun mode ---------- */
+  const funBtn = document.getElementById('funToggle');
+  function syncFun(){
+    const on = document.body.classList.contains('fun-mode');
+    funBtn.innerHTML = `<span class="led"></span> FUN: ${on ? 'ON' : 'OFF'}`;
+    funBtn.setAttribute('aria-pressed', on);
+  }
+  funBtn.addEventListener('click', () => {
+    const on = document.body.classList.toggle('fun-mode');
+    syncFun();
+    sfx.toggle(on);
+    if (on) { burst(innerWidth/2, 200, 100); unlock('chaos','CHAOS GOBLIN','Fun mode on: rainbow names, wobble cards, sparkle cursor.','🌈'); }
+  });
+
+  /* ---------- Sound toggle ---------- */
+  const soundBtn = document.getElementById('soundToggle');
+  function syncSound(){
+    soundBtn.innerHTML = `<span class="led"></span> SOUND: ${soundOn ? 'ON' : 'OFF'}`;
+    soundBtn.setAttribute('aria-pressed', soundOn);
+    soundBtn.classList.toggle('muted', !soundOn);
+  }
+  syncSound();
+  soundBtn.addEventListener('click', () => {
+    soundOn = !soundOn;
+    try { localStorage.setItem('axemoth-sound', soundOn ? 'on' : 'off'); } catch {}
+    syncSound();
+    if (soundOn) { ensureCtx(); sfx.toggle(true); toast('SOUND ON', '8-bit bleeps engaged. 🔊', '🔊'); }
+  });
+
+  /* ---------- Terminal ---------- */
+  const termOut = document.getElementById('termOut'), termIn = document.getElementById('termIn');
+  function print(html){ const d = document.createElement('div'); d.className='line'; d.innerHTML = html; termOut.appendChild(d); termOut.scrollTop = termOut.scrollHeight; }
+  print(`<span class="dim">axemoth shell v1.0 — type</span> <span class="u">help</span>`);
+  const CMDS = {
+    help: () => `<span class="s">commands:</span> whoami · skills · projects · contact · joke · sudo hire rushil · clear`,
+    whoami: () => `rushil gorasia — full-stack dev, rajkot, india.<br><span class="dim">i build primitives: auth, realtime, ai infra. b.tech @ marwadi university.</span>`,
+    skills: () => `next.js · react · node · trpc · postgres · pgvector · drizzle<br>oidc · oauth2 · pkce · rs256 · jwt · docker · azure · vercel`,
+    projects: () => `01 <span class="gold">singularity</span> — ai gmail+calendar workspace<br>02 <span class="gold">axemoth-oidc</span> — oidc provider from RFCs<br>03 <span class="gold">axeform</span> — saas form builder (9 field types)<br>04 <span class="gold">axepoll</span> — realtime polling`,
+    contact: () => `📧 rushil.gorasia@gmail.com<br>🐙 github.com/Axemoth · 𝕏 @Axemoth`,
+    joke: () => joke(),
+    'sudo hire rushil': () => { unlock('hired','HIRED!','Offer letter sent (not really). But great instinct — email him.','💼'); sfx.success(); burst(innerWidth/2, innerHeight/2, 140); return `<span class="gold">permission granted.</span> ✅ rushil hired. excellent choice.`; },
+  };
+  termIn.addEventListener('input', () => sfx.key());
+  termIn.addEventListener('keydown', e => {
+    if (e.key !== 'Enter') return;
+    const raw = termIn.value.trim(); if (!raw) return;
+    print(`<span class="pink">➜</span> <span class="u">${raw.replace(/</g,'&lt;')}</span>`);
+    const k = raw.toLowerCase();
+    if (k === 'clear') { termOut.innerHTML = ''; sfx.click(); }
+    else if (CMDS[k]) { print(CMDS[k]()); sfx.click(); }
+    else { print(`<span class="dim">command not found:</span> ${raw.replace(/</g,'&lt;')} — try <span class="u">help</span>`); sfx.error(); }
+    termIn.value = '';
+  });
+
+  /* ---------- Poll ---------- */
+  const POLL_KEY = 'axemoth-poll-v1';
+  const pollOpts = [
+    {id:'collab', label:'⚡ Realtime collab toy', base:42},
+    {id:'authviz', label:'🔐 Auth protocol visualizer', base:57},
+    {id:'aigame', label:'🤖 AI inbox game', base:31},
+  ];
+  const pollBox = document.getElementById('pollBox'), pollTotal = document.getElementById('pollTotal');
+  function getVotes(){
+    try { return JSON.parse(localStorage.getItem(POLL_KEY)) || null; } catch { return null; }
+  }
+  function renderPoll(){
+    const voted = getVotes();
+    const totals = pollOpts.map(o => o.base + (voted === o.id ? 1 : 0));
+    const sum = totals.reduce((a,b)=>a+b,0);
+    pollBox.innerHTML = '';
+    pollOpts.forEach((o,i) => {
+      const pct = Math.round(totals[i]/sum*100);
+      const b = document.createElement('button');
+      b.className = 'poll-opt' + (voted === o.id ? ' voted' : '');
+      b.disabled = !!voted;
+      b.innerHTML = `<span class="bar" style="width:0%"></span><span class="inner"><span>${o.label}</span><span>${voted ? pct+'%' : 'vote →'}</span></span>`;
+      b.addEventListener('click', () => {
+        localStorage.setItem(POLL_KEY, JSON.stringify(o.id));
+        sfx.success();
+        unlock('vote','DEMOCRACY ENJOYER','Vote counted. WebSockets would\'ve synced this live in AxePoll.','🗳️');
+        burst(b.getBoundingClientRect().left + 60, b.getBoundingClientRect().top, 40);
+        renderPoll();
+      });
+      pollBox.appendChild(b);
+      requestAnimationFrame(()=>requestAnimationFrame(()=>{ b.querySelector('.bar').style.width = (voted ? pct : 0)+'%'; }));
+    });
+    pollTotal.textContent = voted ? `${sum} votes · you voted ✓` : `${sum} votes · click to vote`;
+  }
+  renderPoll();
+  document.getElementById('pollReset').addEventListener('click', () => { localStorage.removeItem(POLL_KEY); renderPoll(); });
+
+  /* ---------- JWT decoder ---------- */
+  const jwtIn = document.getElementById('jwtIn'), jH = document.getElementById('jwtHeader'), jP = document.getElementById('jwtPayload');
+  function b64urlDecode(s){
+    s = s.replace(/-/g,'+').replace(/_/g,'/');
+    while (s.length % 4) s += '=';
+    return decodeURIComponent(escape(atob(s)));
+  }
+  function decodeJwt(){
+    const t = jwtIn.value.trim();
+    const parts = t.split('.');
+    if (parts.length !== 3) { jH.innerHTML = '<b>HEADER</b>⚠️ need 3 parts: xxx.yyy.zzz'; jP.innerHTML = '<b>PAYLOAD</b>—'; sfx.error(); return; }
+    try {
+      const h = JSON.parse(b64urlDecode(parts[0])), p = JSON.parse(b64urlDecode(parts[1]));
+      jH.innerHTML = '<b>HEADER</b>' + JSON.stringify(h, null, 2).replace(/</g,'&lt;');
+      jP.innerHTML = '<b>PAYLOAD</b>' + JSON.stringify(p, null, 2).replace(/</g,'&lt;');
+      sfx.success();
+      unlock('jwt','TOKEN WHISPERER','You decoded a JWT by hand. The OIDC project thanks you.','🔑');
+    } catch {
+      jH.innerHTML = '<b>HEADER</b>⚠️ invalid base64url JSON'; jP.innerHTML = '<b>PAYLOAD</b>—'; sfx.error();
+    }
+  }
+  document.getElementById('jwtDecode').addEventListener('click', decodeJwt);
+  document.getElementById('jwtSample').addEventListener('click', () => {
+    const h = btoa(JSON.stringify({alg:'RS256',typ:'JWT',kid:'axemoth-01'})).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+    const p = btoa(JSON.stringify({iss:'https://oidc.axemoth.com',sub:'rushil_01',aud:'singularity',exp:1893456000,iat:1710000000,scope:'openid profile email'})).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+    jwtIn.value = `${h}.${p}.SAMPLE_SIGNATURE_VERIFY_WITH_JWKS`;
+    decodeJwt();
+  });
+
+  /* ---------- Copy email + jokes ---------- */
+  document.getElementById('copyEmail').addEventListener('click', async () => {
+    try { await navigator.clipboard.writeText('rushil.gorasia@gmail.com'); sfx.success(); toast('COPIED', 'Email copied. Use it wisely.', '📋'); unlock('net','NETWORKER','Email copied. The hardest part of networking: done.','📧'); }
+    catch { toast('EMAIL', 'rushil.gorasia@gmail.com', '📧'); }
+  });
+  const JOKES = [
+    'Why do programmers prefer dark mode? Because light attracts bugs. 🐛',
+    'I told my JWT a secret. Now everyone can read it — it\'s just base64. 🔓',
+    'My code doesn\'t have bugs. It has undocumented real-time features. ⚡',
+    'OAuth walked into a bar. The bartender says "who are you?" OAuth says "let me redirect you to someone who knows." 🔐',
+    'There are 10 kinds of people: those who understand binary and those who don\'t. 💾',
+  ];
+  function joke(){ return JOKES[Math.floor(Math.random()*JOKES.length)]; }
+  document.getElementById('jokeBtn').addEventListener('click', e => {
+    sfx.joke();
+    toast('IMPORTANT ADVICE', joke(), '🤡');
+    burst(e.clientX, e.clientY, 30);
+  });
+
+  /* ---------- Generic UI clicks ---------- */
+  document.querySelectorAll('.btn, .plink, .mini-btn, .social-link, .nav-cta').forEach(el => {
+    el.addEventListener('click', () => sfx.click());
+  });
+
+  /* ---------- Scroll achievement ---------- */
+  const pio2 = new IntersectionObserver(es => es.forEach(e => {
+    if (e.isIntersecting) { unlock('explorer','EXPLORER','You scrolled to the projects. The best part.','🗺️'); pio2.disconnect(); }
+  }), {threshold:.3});
+  pio2.observe(document.getElementById('projects'));
+})();
 </script>
 </body>
 </html>
