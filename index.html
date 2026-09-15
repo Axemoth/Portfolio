@@ -404,28 +404,31 @@
   .toast span{ font-size:.78rem; color:var(--slate); line-height:1.5; }
   #confetti{ position:fixed; inset:0; pointer-events:none; z-index:350; }
 
-  /* ---------- 3D GAME LAYER ---------- */
-  #bg3d{ position:fixed; inset:0; z-index:0; pointer-events:none; opacity:.9; }
-  .game-hud{
-    margin-top:1.6rem; max-width:420px;
-    font-family:var(--font-pixel); font-size:.58rem; letter-spacing:.05em;
-    border:1px dashed rgba(110,231,255,.35); border-radius:10px;
-    background:rgba(13,17,23,.72); backdrop-filter:blur(8px);
-    padding:.7rem .9rem; color:var(--slate);
-    display:flex; flex-direction:column; gap:.45rem;
-  }
-  .game-hud .game-score{ display:flex; gap:.6rem; align-items:center; color:var(--paper); }
-  .game-hud .game-score b{ color:var(--gold); }
-  .game-hud .game-score .game-dot{ color:var(--slate-dim); }
-  .game-hud .game-hint{ font-family:var(--font-mono); font-size:.68rem; letter-spacing:.02em; color:var(--slate-dim); }
-  .game-hud .game-hint b{ color:var(--cyan); font-weight:500; }
-  .game-tip{
-    position:fixed; z-index:60; pointer-events:none; display:none;
-    font-family:var(--font-pixel); font-size:.55rem; color:var(--ink);
-    background:var(--lime); border-radius:7px; padding:.5rem .65rem;
-    transform:translate(14px,14px); white-space:nowrap;
-    box-shadow:0 8px 24px rgba(0,0,0,.45);
-  }
+  /* ---------- ARCADE (dedicated game section) ---------- */
+  #arcade{ position:relative; z-index:1; padding:5rem var(--pad-x) 6rem; border-top:1px solid var(--border); }
+  .arc-shell{ margin-top:2.5rem; background:var(--panel); border:1px solid var(--border); border-radius:16px; overflow:hidden; }
+  .arc-top{ display:flex; align-items:center; justify-content:space-between; gap:1rem; flex-wrap:wrap; padding:.9rem 1.2rem; border-bottom:1px solid var(--border); background:var(--panel-raised); }
+  .arc-top h3{ font-family:var(--font-pixel); font-size:.62rem; letter-spacing:.06em; }
+  .arc-top h3 .live{ color:#ff5f57; animation:blink 1.2s steps(1) infinite; }
+  .arc-stats{ display:flex; gap:1.1rem; flex-wrap:wrap; font-family:var(--font-mono); font-size:.72rem; color:var(--slate); }
+  .arc-stats b{ color:var(--gold); }
+  .arc-stats .hp b{ color:var(--pink); letter-spacing:.15em; }
+  .arc-stage{ position:relative; background:#070a10; }
+  #arcCanvas{ display:block; width:100%; aspect-ratio:16/10; max-height:70vh; touch-action:none; cursor:crosshair; }
+  .arc-overlay{ position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1rem; text-align:center; background:rgba(7,10,16,.8); backdrop-filter:blur(4px); padding:1.5rem; }
+  .arc-overlay.hidden{ display:none; }
+  .arc-overlay h4{ font-family:var(--font-pixel); font-size:clamp(.75rem,2.4vw,1.05rem); color:var(--lime); line-height:1.9; }
+  .arc-overlay p{ color:var(--slate); font-size:.85rem; max-width:48ch; line-height:1.9; }
+  .arc-overlay p b{ color:var(--paper); }
+  .arc-overlay p code{ font-family:var(--font-mono); color:var(--cyan); font-size:.76rem; background:rgba(110,231,255,.08); padding:.1rem .4rem; border-radius:5px; }
+  .arc-banner{ position:absolute; top:12%; left:50%; transform:translateX(-50%); font-family:var(--font-pixel); font-size:clamp(.65rem,2.4vw,.95rem); color:var(--gold); background:rgba(7,10,16,.75); border:1px solid rgba(255,216,77,.4); padding:.7rem 1.2rem; border-radius:10px; opacity:0; transition:opacity .3s; pointer-events:none; white-space:nowrap; }
+  .arc-banner.show{ opacity:1; }
+  .arc-flash{ position:absolute; inset:0; pointer-events:none; background:radial-gradient(circle, rgba(255,70,70,.4), transparent 70%); opacity:0; transition:opacity .1s; }
+  .arc-controls{ display:flex; gap:.6rem; flex-wrap:wrap; padding:1rem 1.2rem; border-top:1px solid var(--border); align-items:center; }
+  .arc-controls .arc-note{ font-family:var(--font-mono); font-size:.7rem; color:var(--slate-dim); }
+  .arc-legend{ display:flex; gap:.5rem; flex-wrap:wrap; padding:0 1.2rem 1.2rem; }
+  .arc-legend span{ font-family:var(--font-mono); font-size:.68rem; color:var(--slate); border:1px solid var(--border); border-radius:99px; padding:.35rem .75rem; background:rgba(255,255,255,.02); }
+  .arc-legend b{ font-weight:600; }
 
   .reveal{ opacity:0; transform:translateY(24px); transition:opacity 0.6s ease, transform 0.6s ease; }
   .reveal.in{ opacity:1; transform:translateY(0); }
@@ -443,7 +446,7 @@
       max-height:0; overflow:hidden; padding:0 var(--pad-x);
       transition:max-height 0.3s ease, padding 0.3s ease;
     }
-    .nav-links.open{ max-height:280px; padding:1rem var(--pad-x) 1.5rem; }
+    .nav-links.open{ max-height:340px; padding:1rem var(--pad-x) 1.5rem; }
     .nav-links a{ padding:0.75rem 0; width:100%; border-bottom:1px solid var(--border); }
     .nav-cta{ margin-top:0.5rem; text-align:center; }
     .nav-toggle{ display:block; }
@@ -462,7 +465,6 @@
 </head>
 <body>
 
-<canvas id="bg3d" aria-hidden="true"></canvas>
 <div id="hpbar"></div>
 <div id="cursor-dot"></div><div id="cursor-ring"></div>
 <canvas id="confetti"></canvas>
@@ -475,6 +477,7 @@
       <li><a href="#about">About</a></li>
       <li><a href="#projects">Projects</a></li>
       <li><a href="#playground">Playground</a></li>
+      <li><a href="#arcade">Arcade</a></li>
       <li><a href="#contact">Contact</a></li>
       <li><a href="https://github.com/Axemoth" target="_blank" rel="noopener" class="nav-cta">GitHub ↗</a></li>
     </ul>
@@ -529,12 +532,7 @@
       <div class="xp-label"><span>LVL 4 — SHIPPED PRODUCTS</span><b id="xpPct">0%</b></div>
       <div class="xp-bar"><div class="xp-fill" id="xpFill"></div></div>
     </div>
-    <div class="game-hud reveal" id="gameHud">
-      <div class="game-score"><span>SCORE <b id="gameScore">000</b></span><span class="game-dot">·</span><span>ORBS <b id="gameOrbs">0/4</b></span><span class="game-dot">·</span><span>BEST <b id="gameBest">000</b></span></div>
-      <div class="game-hint">🚀 move to steer · <b>click to shoot</b> · blast all 4 project orbs</div>
-    </div>
   </div>
-  <div class="game-tip" id="gameTip"></div>
 </section>
 
 <div class="marquee" aria-hidden="true">
@@ -752,6 +750,50 @@
           </div>
         </div>
       </div>
+    </div>
+  </div>
+</section>
+
+<section id="arcade">
+  <div class="eyebrow reveal">Insert Coin</div>
+  <h2 class="reveal">Defend the server.</h2>
+  <p class="reveal" style="color:var(--slate);margin-top:.8rem;max-width:62ch;font-size:.92rem;line-height:1.8;">Bugs are swarming the production server. Your firewall ship fires on its own — you steer. Ram bugs, grab project power-ups, and don't let anything touch the core.</p>
+
+  <div class="arc-shell reveal">
+    <div class="arc-top">
+      <h3><span class="live">●</span> SERVER_DEFENSE.exe</h3>
+      <div class="arc-stats">
+        <span>SCORE <b id="arcScore">0000</b></span>
+        <span>WAVE <b id="arcWave">--</b></span>
+        <span class="hp">CORE <b id="arcHp">♥♥♥</b></span>
+        <span>BEST <b id="arcBest">0000</b></span>
+      </div>
+    </div>
+    <div class="arc-stage" id="arcStage">
+      <canvas id="arcCanvas"></canvas>
+      <div class="arc-flash" id="arcFlash"></div>
+      <div class="arc-banner" id="arcBanner"></div>
+      <div class="arc-overlay" id="arcStart">
+        <h4>🛡️ MISSION: KEEP THE CORE ALIVE</h4>
+        <p><b>Move:</b> mouse · touch · <code>←</code> <code>→</code> / <code>A</code> <code>D</code> — guns fire automatically.<br/>Bugs that reach the core cost <b>1 ♥</b>. You have <b>3</b>. Ram bugs to smash them. Catch the falling power-ups.</p>
+        <button class="btn btn-primary magnetic" id="arcStartBtn">▶ Start defense</button>
+      </div>
+      <div class="arc-overlay hidden" id="arcOver">
+        <h4>💥 CORE BREACHED</h4>
+        <p id="arcOverText">Score 0 · survived to wave 1.</p>
+        <button class="btn btn-primary magnetic" id="arcRetryBtn">↻ Reboot server</button>
+      </div>
+    </div>
+    <div class="arc-controls">
+      <button class="mini-btn primary" id="arcPauseBtn">⏸ Pause</button>
+      <button class="mini-btn" id="arcRestartBtn">↻ Restart</button>
+      <span class="arc-note">auto-fire engaged · P = screen nuke</span>
+    </div>
+    <div class="arc-legend">
+      <span><b style="color:#5b7cfa">S</b> Singularity spread-shot</span>
+      <span><b style="color:#ff5da2">O</b> OIDC shield</span>
+      <span><b style="color:#c8ff5e">A</b> AxeForm rapid-fire</span>
+      <span><b style="color:#6ee7ff">P</b> AxePoll bug-poll nuke</span>
     </div>
   </div>
 </section>
@@ -1176,14 +1218,18 @@
   window.addEventListener('game:collect', e => {
     const d = e.detail || {};
     sfx.success();
-    burst(d.x ?? innerWidth/2, d.y ?? innerHeight/3, 60);
-    unlock('orb-' + (d.id || 'x'), 'ORB SECURED — ' + (d.label || '???'), (d.label || 'An orb') + ' destroyed. That project lives in Selected Work ↓', '🎯');
+    burst(d.x ?? innerWidth/2, d.y ?? innerHeight/3, 45);
+    toast('POWER-UP — ' + (d.label || '???'), d.hint || 'Ship upgraded. Go get them.', '⚡');
+    unlock('pow-' + (d.id || 'x'), 'ARMED — ' + (d.label || '???'), 'Picked up a ' + (d.label || 'power-up') + ' in Server Defense.', '⚡');
   });
   window.addEventListener('game:cleared', e => {
     const d = e.detail || {};
     sfx.powerup();
-    burst(innerWidth/2, innerHeight/2, 160);
-    unlock('galaxy', 'GALAXY CLEARED', 'All 4 project orbs blasted. Score ' + (d.score ?? '') + '. The orbs will respawn… they always do.', '👾');
+    toast('WAVE ' + (d.wave ?? '?') + ' CLEARED', 'Bonus +' + (d.bonus ?? 0) + '. Incoming gets faster.', '🌊');
+  });
+  window.addEventListener('game:over', e => {
+    const d = e.detail || {};
+    unlock('defender', 'SERVER DEFENDED (mostly)', 'Final score ' + (d.score ?? 0) + ' · reached wave ' + (d.wave ?? 1) + '. The bugs will be back.', '🛡️');
   });
 
   /* ---------- Scroll achievement ---------- */
@@ -1196,374 +1242,559 @@
 
 <script type="module">
 /* ============================================================
-   ORBITAL ARCADE — Three.js game layer
-   Steer the ship with your cursor, click/tap to shoot,
-   blast all 4 project orbs. Score + events bridge to the
-   main portfolio script via window CustomEvents.
-   Fails silently (site keeps working) if WebGL/CDN is down.
+   SERVER DEFENSE — dedicated arcade-section game (Three.js)
+   A firewall ship defends the production core from bug waves.
+   Project orbs drop as power-ups: S spread, O shield,
+   A rapid-fire, P screen nuke. Bridges to the main portfolio
+   script via window CustomEvents (game:collect / cleared / over).
    ============================================================ */
 import * as THREE from 'three';
 
 try {
-  const canvas = document.getElementById('bg3d');
-  const hud = document.getElementById('gameHud');
-  const scoreEl = document.getElementById('gameScore');
-  const orbsEl = document.getElementById('gameOrbs');
-  const bestEl = document.getElementById('gameBest');
-  const tip = document.getElementById('gameTip');
-  const hintEl = hud ? hud.querySelector('.game-hint') : null;
+  const stage = document.getElementById('arcStage');
+  const canvas = document.getElementById('arcCanvas');
+  const scoreEl = document.getElementById('arcScore');
+  const waveEl = document.getElementById('arcWave');
+  const hpEl = document.getElementById('arcHp');
+  const bestEl = document.getElementById('arcBest');
+  const flashEl = document.getElementById('arcFlash');
+  const bannerEl = document.getElementById('arcBanner');
+  const startOv = document.getElementById('arcStart');
+  const overOv = document.getElementById('arcOver');
+  const overText = document.getElementById('arcOverText');
+  const noteEl = stage ? stage.parentElement.querySelector('.arc-note') : null;
+  if (!stage || !canvas) throw new Error('arcade stage missing');
+
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const isMobile = window.matchMedia('(max-width: 900px)').matches;
 
-  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isMobile ? 1.5 : 2));
-  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setClearColor(0x070a10, 1);
 
   const scene = new THREE.Scene();
-  scene.fog = new THREE.FogExp2(0x0a0d12, 0.022);
-
-  const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 100);
+  scene.fog = new THREE.FogExp2(0x070a10, 0.018);
+  const camera = new THREE.PerspectiveCamera(60, 1.6, 0.1, 100);
   const CAM_Z = 14;
   camera.position.set(0, 0, CAM_Z);
 
-  scene.add(new THREE.AmbientLight(0x8899ff, 0.7));
-  const dir = new THREE.DirectionalLight(0xffffff, 1.1);
-  dir.position.set(5, 8, 6);
-  scene.add(dir);
+  scene.add(new THREE.AmbientLight(0x8899ff, 0.75));
+  const dirL = new THREE.DirectionalLight(0xffffff, 1.2);
+  dirL.position.set(5, 8, 6);
+  scene.add(dirL);
 
-  /* ---------- starfields ---------- */
-  function makeStars(count, size, color, opacity, spread) {
-    const pos = new Float32Array(count * 3);
-    for (let i = 0; i < count; i++) {
-      pos[i * 3] = (Math.random() - 0.5) * spread.x;
-      pos[i * 3 + 1] = (Math.random() - 0.5) * spread.y;
-      pos[i * 3 + 2] = -Math.random() * 18 - 1;
+  const HALF_H = Math.tan(THREE.MathUtils.degToRad(30)) * CAM_Z;
+  let halfW = HALF_H * 1.6;
+  const shipY = () => -HALF_H + 2.3;
+  const coreY = () => -HALF_H + 0.9;
+
+  function fit() {
+    const w = Math.max(stage.clientWidth, 50);
+    const h = Math.max(stage.clientHeight, 50);
+    renderer.setSize(w, h, false);
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+    halfW = HALF_H * camera.aspect;
+  }
+  fit();
+  window.addEventListener('resize', fit);
+  if (window.ResizeObserver) new ResizeObserver(fit).observe(stage);
+
+  /* ---------- backdrop stars ---------- */
+  const starGeo = new THREE.BufferGeometry();
+  {
+    const N = isMobile ? 140 : 260;
+    const pos = new Float32Array(N * 3);
+    for (let i = 0; i < N; i++) {
+      pos[i * 3] = (Math.random() - 0.5) * 44;
+      pos[i * 3 + 1] = (Math.random() - 0.5) * 24;
+      pos[i * 3 + 2] = -Math.random() * 14 - 1;
     }
-    const geo = new THREE.BufferGeometry();
-    geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-    const mat = new THREE.PointsMaterial({ size, color, transparent: true, opacity, depthWrite: false, blending: THREE.AdditiveBlending });
-    const pts = new THREE.Points(geo, mat);
-    scene.add(pts);
-    return pts;
+    starGeo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
   }
-  const stars = makeStars(isMobile ? 400 : 900, 0.055, 0xaabbff, 0.85, { x: 46, y: 30 });
-  const dust = makeStars(isMobile ? 120 : 260, 0.11, 0xff5da2, 0.35, { x: 40, y: 26 });
+  const stars = new THREE.Points(starGeo, new THREE.PointsMaterial({ size: 0.07, color: 0x8fa8ff, transparent: true, opacity: 0.8, depthWrite: false }));
+  scene.add(stars);
 
-  /* ---------- bounds helper ---------- */
-  function bounds() {
-    const halfH = Math.tan(THREE.MathUtils.degToRad(30)) * CAM_Z;
-    const halfW = halfH * camera.aspect;
-    return { halfW, halfH };
-  }
+  /* ---------- floor line + core ---------- */
+  const floor = new THREE.Mesh(
+    new THREE.BoxGeometry(60, 0.06, 0.06),
+    new THREE.MeshBasicMaterial({ color: 0x6ee7ff, transparent: true, opacity: 0.5 })
+  );
+  scene.add(floor);
+  const core = new THREE.Group();
+  const coreGem = new THREE.Mesh(
+    new THREE.IcosahedronGeometry(0.7, 0),
+    new THREE.MeshStandardMaterial({ color: 0x6ee7ff, emissive: 0x6ee7ff, emissiveIntensity: 1, roughness: 0.2, metalness: 0.1, flatShading: true })
+  );
+  const coreShell = new THREE.Mesh(
+    new THREE.IcosahedronGeometry(1.05, 1),
+    new THREE.MeshBasicMaterial({ color: 0x6ee7ff, wireframe: true, transparent: true, opacity: 0.35 })
+  );
+  core.add(coreGem, coreShell);
+  scene.add(core);
 
-  /* ---------- orb labels ---------- */
-  function makeLabel(text, colorCss) {
-    const c = document.createElement('canvas');
-    c.width = 512; c.height = 128;
-    const g = c.getContext('2d');
-    g.font = '700 44px "IBM Plex Mono", monospace';
-    g.textAlign = 'center'; g.textBaseline = 'middle';
-    g.shadowColor = colorCss; g.shadowBlur = 26;
-    g.fillStyle = colorCss;
-    g.fillText(text, 256, 64);
-    const tex = new THREE.CanvasTexture(c);
-    tex.anisotropy = 4;
-    const sp = new THREE.Sprite(new THREE.SpriteMaterial({ map: tex, transparent: true, depthWrite: false }));
-    sp.scale.set(3.4, 0.85, 1);
-    return sp;
-  }
-
-  /* ---------- project orbs ---------- */
-  const ORBS = [
-    { id: 'singularity', label: 'SINGULARITY', css: '#5b7cfa', color: 0x5b7cfa },
-    { id: 'oidc',        label: 'OIDC',        css: '#ff5da2', color: 0xff5da2 },
-    { id: 'axeform',     label: 'AXEFORM',     css: '#c8ff5e', color: 0xc8ff5e },
-    { id: 'axepoll',     label: 'AXEPOLL',     css: '#6ee7ff', color: 0x6ee7ff },
-  ];
-  const orbObjs = [];
-  function placeOrb(o) {
-    const { halfW, halfH } = bounds();
-    const sx = isMobile ? 0.55 : 1;
-    o.group.position.set(
-      (Math.random() - 0.5) * 2 * Math.max(halfW * sx - 2.2, 1.5),
-      (Math.random() - 0.5) * 2 * Math.max(halfH - 2.6, 1) + 0.4,
-      -1 - Math.random() * 3
-    );
-  }
-  ORBS.forEach((def, i) => {
-    const group = new THREE.Group();
-    const core = new THREE.Mesh(
-      new THREE.IcosahedronGeometry(0.85, 1),
-      new THREE.MeshStandardMaterial({ color: def.color, emissive: def.color, emissiveIntensity: 0.55, roughness: 0.3, metalness: 0.15, flatShading: true })
-    );
-    const shell = new THREE.Mesh(
-      new THREE.IcosahedronGeometry(1.25, 1),
-      new THREE.MeshBasicMaterial({ color: def.color, wireframe: true, transparent: true, opacity: 0.32 })
-    );
-    const label = makeLabel(def.label, def.css);
-    label.position.y = 1.75;
-    group.add(core, shell, label);
-    group.userData.spin = 0.4 + Math.random() * 0.5;
-    group.userData.phase = Math.random() * Math.PI * 2;
-    group.userData.baseY = 0;
-    scene.add(group);
-    const o = { ...def, group, core, alive: true, idx: i };
-    placeOrb(o);
-    o.group.userData.baseY = o.group.position.y;
-    orbObjs.push(o);
-  });
-
-  /* ---------- player ship ---------- */
+  /* ---------- ship ---------- */
   const ship = new THREE.Group();
   const shipCore = new THREE.Mesh(
-    new THREE.OctahedronGeometry(0.34, 0),
-    new THREE.MeshStandardMaterial({ color: 0xc8ff5e, emissive: 0xc8ff5e, emissiveIntensity: 0.9, roughness: 0.25, metalness: 0.2, flatShading: true })
+    new THREE.OctahedronGeometry(0.36, 0),
+    new THREE.MeshStandardMaterial({ color: 0xc8ff5e, emissive: 0xc8ff5e, emissiveIntensity: 0.95, roughness: 0.25, metalness: 0.2, flatShading: true })
   );
   const shipRing = new THREE.Mesh(
-    new THREE.TorusGeometry(0.55, 0.045, 8, 32),
-    new THREE.MeshBasicMaterial({ color: 0x6ee7ff, transparent: true, opacity: 0.8 })
+    new THREE.TorusGeometry(0.58, 0.05, 8, 32),
+    new THREE.MeshBasicMaterial({ color: 0x6ee7ff, transparent: true, opacity: 0.85 })
   );
-  ship.add(shipCore, shipRing);
-  ship.position.set(0, -2.5, 1.5);
+  const shield = new THREE.Mesh(
+    new THREE.SphereGeometry(0.85, 12, 10),
+    new THREE.MeshBasicMaterial({ color: 0xff5da2, wireframe: true, transparent: true, opacity: 0.7 })
+  );
+  shield.visible = false;
+  ship.add(shipCore, shipRing, shield);
   scene.add(ship);
-  const shipTarget = new THREE.Vector3(0, -2.5, 1.5);
-  const mouseNdc = new THREE.Vector2(0, -0.3);
+  let shipX = 0, shipTargetX = 0;
+  const keys = { left: false, right: false };
 
-  /* ---------- lasers + hit rings ---------- */
-  const lasers = [];
-  const laserGeo = new THREE.BoxGeometry(0.09, 0.09, 1.2);
-  const laserMat = new THREE.MeshBasicMaterial({ color: 0x6ee7ff });
-  const rings = [];
-  function spawnRing(pos, color) {
+  /* ---------- shared geo/mat ---------- */
+  const bulletGeo = new THREE.BoxGeometry(0.1, 0.5, 0.1);
+  const bulletMat = new THREE.MeshBasicMaterial({ color: 0xc8ff5e });
+  const bugGeo = new THREE.TetrahedronGeometry(0.52);
+  const bugShellGeo = new THREE.TetrahedronGeometry(0.78);
+  const bruteGeo = new THREE.OctahedronGeometry(0.62);
+  const bugMat = new THREE.MeshStandardMaterial({ color: 0xff4d5e, emissive: 0xff4d5e, emissiveIntensity: 0.7, roughness: 0.35, flatShading: true });
+  const bugWireMat = new THREE.MeshBasicMaterial({ color: 0xff4d5e, wireframe: true, transparent: true, opacity: 0.5 });
+  const bruteMat = new THREE.MeshStandardMaterial({ color: 0xffd84d, emissive: 0xffd84d, emissiveIntensity: 0.6, roughness: 0.35, flatShading: true });
+  const POWERS = {
+    S: { css: '#5b7cfa', color: 0x5b7cfa, label: 'SINGULARITY SPREAD', hint: 'Triple-shot for 10s. Inbox zero, but for bugs.' },
+    O: { css: '#ff5da2', color: 0xff5da2, label: 'OIDC SHIELD', hint: 'Cryptographically verified bubble. Absorbs the next core hit.' },
+    A: { css: '#c8ff5e', color: 0xc8ff5e, label: 'AXEFORM RAPID', hint: 'Validation passed: fire-rate tripled for 8s.' },
+    P: { css: '#6ee7ff', color: 0x6ee7ff, label: 'AXEPOLL NUKE', hint: 'The poll is unanimous: every bug dies. Now.' },
+  };
+
+  const bullets = [], bugs = [], drops = [], rings = [], sparks = [];
+  function spawnRing(p, color, max = 2.2) {
     const m = new THREE.Mesh(
-      new THREE.TorusGeometry(1, 0.06, 8, 48),
-      new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.9, blending: THREE.AdditiveBlending, depthWrite: false })
+      new THREE.TorusGeometry(0.6, 0.06, 8, 40),
+      new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.95, blending: THREE.AdditiveBlending, depthWrite: false })
     );
-    m.position.copy(pos);
+    m.position.copy(p);
     scene.add(m);
-    rings.push({ mesh: m, life: 1 });
+    rings.push({ mesh: m, life: 1, max });
   }
-
-  /* ---------- tiny pew (respects sound toggle) ---------- */
-  let pctx = null;
-  function pew() {
-    try {
-      if (localStorage.getItem('axemoth-sound') === 'off') return;
-      pctx = pctx || new (window.AudioContext || window.webkitAudioContext)();
-      if (pctx.state === 'suspended') pctx.resume();
-      const t = pctx.currentTime;
-      const o = pctx.createOscillator(), g = pctx.createGain();
-      o.type = 'square';
-      o.frequency.setValueAtTime(880, t);
-      o.frequency.exponentialRampToValueAtTime(220, t + 0.12);
-      g.gain.setValueAtTime(0.03, t);
-      g.gain.exponentialRampToValueAtTime(0.0001, t + 0.12);
-      o.connect(g); g.connect(pctx.destination);
-      o.start(t); o.stop(t + 0.14);
-    } catch {}
-  }
-
-  /* ---------- score ---------- */
-  let score = 0;
-  let best = 0;
-  try { best = parseInt(localStorage.getItem('axemoth-best') || '0', 10) || 0; } catch {}
-  const collected = new Set();
-  const pad = n => String(n).padStart(3, '0');
-  function renderHud() {
-    if (scoreEl) scoreEl.textContent = pad(score);
-    if (orbsEl) orbsEl.textContent = collected.size + '/4';
-    if (bestEl) bestEl.textContent = pad(Math.max(best, score));
-  }
-  renderHud();
-
-  const raycaster = new THREE.Raycaster();
-  const planeZ0 = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0);
-  const tmpV = new THREE.Vector3();
-
-  function screenToWorld(clientX, clientY) {
-    mouseNdc.set((clientX / window.innerWidth) * 2 - 1, -(clientY / window.innerHeight) * 2 + 1);
-    raycaster.setFromCamera(mouseNdc, camera);
-    const pt = new THREE.Vector3();
-    raycaster.ray.intersectPlane(planeZ0, pt);
-    return pt || tmpV.set(0, 0, 0);
-  }
-
-  function collect(o, clientX, clientY) {
-    if (!o.alive) return;
-    o.alive = false;
-    o.group.visible = false;
-    collected.add(o.id);
-    score += 100;
-    spawnRing(o.group.position, o.color);
-    renderHud();
-    window.dispatchEvent(new CustomEvent('game:collect', { detail: { id: o.id, label: o.label, x: clientX, y: clientY } }));
-    if (collected.size === ORBS.length) {
-      score += 250;
-      renderHud();
-      try { if (score > best) { best = score; localStorage.setItem('axemoth-best', String(best)); } } catch {}
-      renderHud();
-      window.dispatchEvent(new CustomEvent('game:cleared', { detail: { score } }));
-      setTimeout(() => { orbObjs.forEach(respawn); collected.clear(); renderHud(); }, 5000);
-    } else {
-      setTimeout(() => respawn(o), 4000);
+  function spawnSparks(p, color, n = 8) {
+    for (let i = 0; i < n; i++) {
+      const m = new THREE.Mesh(bulletGeo, new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 1 }));
+      m.position.copy(p);
+      m.scale.setScalar(0.7);
+      scene.add(m);
+      sparks.push({ mesh: m, vx: (Math.random() - 0.5) * 9, vy: (Math.random() - 0.5) * 9, life: 0.55 });
     }
   }
-  function respawn(o) {
-    if (o.alive) return;
-    placeOrb(o);
-    o.group.userData.baseY = o.group.position.y;
-    o.group.visible = true;
-    o.group.scale.setScalar(0.01);
-    o.alive = true;
-    renderHud();
+
+  /* ---------- tiny sfx (respects global toggle) ---------- */
+  let actx = null;
+  function ac() {
+    try {
+      if (localStorage.getItem('axemoth-sound') === 'off') return null;
+      actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+      if (actx.state === 'suspended') actx.resume();
+      return actx;
+    } catch { return null; }
+  }
+  function tone(f, d = 0.1, type = 'square', v = 0.028, delay = 0, slide = null) {
+    const ctx = ac(); if (!ctx) return;
+    const t = ctx.currentTime + delay;
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    o.type = type; o.frequency.setValueAtTime(f, t);
+    if (slide) o.frequency.exponentialRampToValueAtTime(slide, t + d);
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(v, t + 0.012);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + d);
+    o.connect(g); g.connect(ctx.destination);
+    o.start(t); o.stop(t + d + 0.05);
+  }
+  let lastPew = 0;
+  const sPew = () => { const n = performance.now(); if (n - lastPew < 95) return; lastPew = n; tone(920, 0.07, 'square', 0.016, 0, 320); };
+  const sBoom = () => { tone(200, 0.22, 'sawtooth', 0.05, 0, 60); tone(120, 0.3, 'triangle', 0.04, 0.03, 50); };
+  const sPickup = () => { tone(660, 0.08, 'square', 0.035); tone(990, 0.14, 'square', 0.035, 0.07); };
+  const sWave = () => { [523, 659, 784, 1047].forEach((f, i) => tone(f, 0.1, 'square', 0.03, i * 0.07)); };
+  const sOver = () => { [440, 349, 262, 175].forEach((f, i) => tone(f, 0.18, 'sawtooth', 0.035, i * 0.13)); };
+  const sShield = () => tone(440, 0.2, 'sine', 0.05, 0, 880);
+
+  /* ---------- state ---------- */
+  let state = 'idle'; // idle | playing | paused | over
+  let score = 0, wave = 0, lives = 3;
+  let best = 0;
+  try { best = parseInt(localStorage.getItem('axemoth-arcade-best') || '0', 10) || 0; } catch {}
+  let spawnQueue = 0, spawnT = 0, fireT = 0, interT = 0;
+  let spreadUntil = 0, rapidUntil = 0, shieldUntil = 0;
+  const now = () => performance.now() / 1000;
+  const pad = n => String(Math.max(0, Math.floor(n))).padStart(4, '0');
+
+  function hud() {
+    if (scoreEl) scoreEl.textContent = pad(score);
+    if (waveEl) waveEl.textContent = wave === 0 ? '--' : String(wave).padStart(2, '0');
+    if (hpEl) hpEl.textContent = '♥'.repeat(lives) + '♡'.repeat(Math.max(0, 3 - lives));
+    if (bestEl) bestEl.textContent = pad(Math.max(best, score));
+    if (noteEl) {
+      const fx = [];
+      if (now() < spreadUntil) fx.push('S ' + Math.ceil(spreadUntil - now()) + 's');
+      if (now() < rapidUntil) fx.push('A ' + Math.ceil(rapidUntil - now()) + 's');
+      if (now() < shieldUntil) fx.push('O shield');
+      noteEl.textContent = fx.length ? 'active: ' + fx.join(' · ') : 'auto-fire engaged · P = screen nuke';
+    }
+  }
+  let bannerTO = null;
+  function banner(txt, ms = 1800) {
+    if (!bannerEl) return;
+    bannerEl.textContent = txt;
+    bannerEl.classList.add('show');
+    clearTimeout(bannerTO);
+    bannerTO = setTimeout(() => bannerEl.classList.remove('show'), ms);
+  }
+  function flash(op = 1) {
+    if (!flashEl || reducedMotion) return;
+    flashEl.style.opacity = op;
+    setTimeout(() => flashEl.style.opacity = 0, 130);
+  }
+  function shake() {
+    if (reducedMotion || !canvas) return;
+    canvas.style.transform = 'translate(' + (Math.random() * 10 - 5) + 'px,' + (Math.random() * 8 - 4) + 'px)';
+    setTimeout(() => canvas.style.transform = '', 140);
+  }
+  function worldToScreen(v) {
+    const r = canvas.getBoundingClientRect();
+    const p = v.clone().project(camera);
+    return { x: r.left + (p.x * 0.5 + 0.5) * r.width, y: r.top + (-p.y * 0.5 + 0.5) * r.height };
   }
 
-  function shoot(clientX, clientY) {
-    const target = screenToWorld(clientX, clientY).clone();
-    // direct hit test: nearest alive orb to the aim point
-    let hit = null, hitDist = 1.6;
-    orbObjs.forEach(o => {
-      if (!o.alive) return;
-      const d = o.group.position.distanceTo(target);
-      if (d < hitDist) { hitDist = d; hit = o; }
+  /* ---------- waves / spawning ---------- */
+  function startWave(n) {
+    wave = n;
+    spawnQueue = 3 + n * 2;
+    spawnT = 0.5;
+    banner('— WAVE ' + n + ' —');
+    sWave();
+    hud();
+  }
+  function spawnBug() {
+    const brute = wave >= 4 && Math.random() < 0.22;
+    const g = new THREE.Group();
+    const coreM = new THREE.Mesh(brute ? bruteGeo : bugGeo, brute ? bruteMat : bugMat);
+    const shellM = new THREE.Mesh(brute ? bruteGeo : bugShellGeo, bugWireMat);
+    shellM.scale.setScalar(1.15);
+    g.add(coreM, shellM);
+    g.position.set((Math.random() - 0.5) * 2 * Math.max(halfW - 1.4, 1), HALF_H + 1, -0.5 - Math.random() * 2);
+    scene.add(g);
+    bugs.push({
+      g, hp: brute ? 2 : 1, brute,
+      speed: (1.5 + wave * 0.28) * (0.85 + Math.random() * 0.4),
+      phase: Math.random() * Math.PI * 2,
+      spin: 1 + Math.random() * 2,
     });
-    // laser visual from ship toward target
-    const m = new THREE.Mesh(laserGeo, laserMat);
-    m.position.copy(ship.position);
-    m.lookAt(target);
-    scene.add(m);
-    const dirV = target.clone().sub(ship.position).normalize();
-    lasers.push({ mesh: m, vel: dirV.multiplyScalar(32), life: 1.1, targetOrb: hit });
-    pew();
-    if (hit) collect(hit, clientX, clientY);
+  }
+  const LETTERS = ['S', 'O', 'A', 'P'];
+  function maybeDrop(p) {
+    if (Math.random() > 0.24) return;
+    const L = LETTERS[Math.floor(Math.random() * LETTERS.length)];
+    const def = POWERS[L];
+    const g = new THREE.Group();
+    const gem = new THREE.Mesh(
+      new THREE.IcosahedronGeometry(0.42, 0),
+      new THREE.MeshStandardMaterial({ color: def.color, emissive: def.color, emissiveIntensity: 0.9, roughness: 0.3, flatShading: true })
+    );
+    g.add(gem);
+    g.position.copy(p);
+    scene.add(g);
+    drops.push({ g, type: L, vy: 2.1, phase: Math.random() * 6 });
+  }
+
+  /* ---------- combat ---------- */
+  function fire() {
+    const y = shipY() + 0.5;
+    const mk = dx => {
+      const m = new THREE.Mesh(bulletGeo, bulletMat);
+      m.position.set(ship.position.x, y, 1.2);
+      scene.add(m);
+      bullets.push({ mesh: m, vx: dx * 4.5, vy: 15 });
+    };
+    if (now() < spreadUntil) { mk(-1); mk(0); mk(1); }
+    else mk(0);
+    sPew();
+  }
+  function killBug(i, byRam) {
+    const b = bugs[i];
+    spawnRing(b.g.position, b.brute ? 0xffd84d : 0xff4d5e);
+    spawnSparks(b.g.position, b.brute ? 0xffd84d : 0xff5da2, b.brute ? 12 : 8);
+    scene.remove(b.g);
+    bugs.splice(i, 1);
+    score += byRam ? 25 : 50;
+    sBoom();
+    maybeDrop(b.g.position.clone());
+    hud();
+  }
+  function nuke() {
+    flash(1);
+    for (let i = bugs.length - 1; i >= 0; i--) {
+      const b = bugs[i];
+      spawnRing(b.g.position, 0x6ee7ff);
+      scene.remove(b.g);
+      bugs.splice(i, 1);
+      score += 50;
+    }
+    banner('BUG POLL: UNANIMOUS WIPE');
+    sWave();
+    hud();
+  }
+  function damage() {
+    if (now() < shieldUntil) {
+      shieldUntil = 0; shield.visible = false;
+      spawnRing(new THREE.Vector3(0, coreY(), 0), 0xff5da2, 4);
+      banner('SHIELD ABSORBED THE HIT');
+      sShield();
+      hud();
+      return;
+    }
+    lives--;
+    flash(1); shake(); sBoom();
+    spawnSparks(new THREE.Vector3(0, coreY(), 0), 0xff4d5e, 14);
+    hud();
+    if (lives <= 0) gameOver();
+  }
+  function applyPower(type, at) {
+    const def = POWERS[type];
+    const t = now();
+    if (type === 'S') spreadUntil = t + 10;
+    if (type === 'A') rapidUntil = t + 8;
+    if (type === 'O') { shieldUntil = t + 15; shield.visible = true; }
+    if (type === 'P') { nuke(); }
+    else sPickup();
+    const s = worldToScreen(at);
+    window.dispatchEvent(new CustomEvent('game:collect', { detail: { id: type, label: def.label, hint: def.hint, x: s.x, y: s.y } }));
+    hud();
+  }
+
+  /* ---------- flow ---------- */
+  function clearField() {
+    [...bullets, ...bugs, ...drops].forEach(o => scene.remove(o.mesh || o.g));
+    bullets.length = bugs.length = drops.length = 0;
+    rings.forEach(r => scene.remove(r.mesh)); rings.length = 0;
+    sparks.forEach(s => scene.remove(s.mesh)); sparks.length = 0;
+  }
+  function startGame() {
+    clearField();
+    score = 0; lives = 3; wave = 0;
+    spreadUntil = rapidUntil = shieldUntil = 0;
+    shield.visible = false;
+    shipX = shipTargetX = 0;
+    startOv.classList.add('hidden');
+    overOv.classList.add('hidden');
+    state = 'playing';
+    pauseBtn.textContent = '⏸ Pause';
+    startWave(1);
+    hud();
+  }
+  function gameOver() {
+    state = 'over';
+    if (score > best) { best = score; try { localStorage.setItem('axemoth-arcade-best', String(best)); } catch {} }
+    overText.textContent = 'Score ' + score + ' · survived to wave ' + wave + ' · best ' + best + '. The core will be rebuilt. Stronger. With tests.';
+    overOv.classList.remove('hidden');
+    sOver();
+    hud();
+    window.dispatchEvent(new CustomEvent('game:over', { detail: { score, wave } }));
+  }
+  function togglePause(force) {
+    if (state !== 'playing' && state !== 'paused') return;
+    state = (force !== undefined) ? (force ? 'paused' : 'playing') : (state === 'playing' ? 'paused' : 'playing');
+    pauseBtn.textContent = state === 'paused' ? '▶ Resume' : '⏸ Pause';
+    if (state === 'paused') banner('PAUSED', 60000);
+    else bannerEl.classList.remove('show');
+  }
+
+  const startBtn = document.getElementById('arcStartBtn');
+  const retryBtn = document.getElementById('arcRetryBtn');
+  const pauseBtn = document.getElementById('arcPauseBtn');
+  const restartBtn = document.getElementById('arcRestartBtn');
+  startBtn.addEventListener('click', () => { ac(); startGame(); });
+  retryBtn.addEventListener('click', () => { ac(); startGame(); });
+  restartBtn.addEventListener('click', () => { ac(); startGame(); });
+  pauseBtn.addEventListener('click', () => togglePause());
+  document.addEventListener('visibilitychange', () => { if (document.hidden) togglePause(true); });
+  if (window.IntersectionObserver) {
+    new IntersectionObserver(es => es.forEach(e => { if (!e.isIntersecting) togglePause(true); }), { threshold: 0.05 }).observe(stage);
   }
 
   /* ---------- input ---------- */
-  let hoverCheck = null;
-  window.addEventListener('pointermove', e => {
-    mouseNdc.set((e.clientX / window.innerWidth) * 2 - 1, -(e.clientY / window.innerHeight) * 2 + 1);
-    const { halfW, halfH } = bounds();
-    shipTarget.set(
-      THREE.MathUtils.clamp(mouseNdc.x * halfW, -halfW + 1, halfW - 1),
-      THREE.MathUtils.clamp(mouseNdc.y * halfH, -halfH + 1.2, halfH - 1.2),
-      1.5
-    );
-    hoverCheck = { x: e.clientX, y: e.clientY };
-  }, { passive: true });
-  window.addEventListener('pointerdown', e => {
-    if (e.target.closest && e.target.closest('input, textarea')) return; // don't hijack typing
-    const { halfW, halfH } = bounds();
-    shipTarget.set(
-      THREE.MathUtils.clamp(((e.clientX / window.innerWidth) * 2 - 1) * halfW, -halfW + 1, halfW - 1),
-      THREE.MathUtils.clamp((-(e.clientY / window.innerHeight) * 2 + 1) * halfH, -halfH + 1.2, halfH - 1.2),
-      1.5
-    );
-    shoot(e.clientX, e.clientY);
-  }, { passive: true });
-  window.addEventListener('touchmove', e => {
-    const t = e.touches[0];
-    if (!t) return;
-    shipTarget.set(
-      THREE.MathUtils.clamp(((t.clientX / window.innerWidth) * 2 - 1) * bounds().halfW, -6, 6),
-      THREE.MathUtils.clamp((-(t.clientY / window.innerHeight) * 2 + 1) * bounds().halfH, -5, 5),
-      1.5
-    );
-  }, { passive: true });
-
-  function updateTip() {
-    if (!hoverCheck || !tip) return;
-    raycaster.setFromCamera(new THREE.Vector2((hoverCheck.x / window.innerWidth) * 2 - 1, -(hoverCheck.y / window.innerHeight) * 2 + 1), camera);
-    const cores = orbObjs.filter(o => o.alive).map(o => o.core);
-    const hits = raycaster.intersectObjects(cores, false);
-    if (hits.length) {
-      const o = orbObjs.find(oo => oo.core === hits[0].object);
-      tip.style.display = 'block';
-      tip.style.left = hoverCheck.x + 'px';
-      tip.style.top = hoverCheck.y + 'px';
-      tip.textContent = '◉ ' + o.label + ' — CLICK TO BLAST';
-    } else {
-      tip.style.display = 'none';
-    }
-    hoverCheck = null;
+  function pointerToX(clientX) {
+    const ndc = (clientX / window.innerWidth) * 2 - 1;
+    // map screen-x to world-x at ship depth (approx: full width → full span)
+    return THREE.MathUtils.clamp(ndc * halfW * 1.05, -halfW + 1, halfW - 1);
   }
-
-  /* ---------- resize ---------- */
-  window.addEventListener('resize', () => {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
+  canvas.addEventListener('pointermove', e => { shipTargetX = pointerToX(e.clientX); }, { passive: true });
+  canvas.addEventListener('pointerdown', e => { shipTargetX = pointerToX(e.clientX); ac(); }, { passive: true });
+  window.addEventListener('keydown', e => {
+    const k = e.key.toLowerCase();
+    if (k === 'arrowleft' || k === 'a') keys.left = true;
+    if (k === 'arrowright' || k === 'd') keys.right = true;
+    if ((k === 'arrowleft' || k === 'arrowright' || k === ' ') && state === 'playing') e.preventDefault();
+  });
+  window.addEventListener('keyup', e => {
+    const k = e.key.toLowerCase();
+    if (k === 'arrowleft' || k === 'a') keys.left = false;
+    if (k === 'arrowright' || k === 'd') keys.right = false;
   });
 
-  /* ---------- loop ---------- */
+  /* ---------- update ---------- */
   const clock = new THREE.Clock();
-  let firstFrame = true;
+  const corePos = new THREE.Vector3();
+  function update(dt, t) {
+    // ambient life (all states)
+    stars.position.y -= dt * 0.25;
+    if (stars.position.y < -6) stars.position.y = 0;
+    coreGem.rotation.y += dt * 0.8;
+    coreShell.rotation.x -= dt * 0.4;
+    coreShell.rotation.y += dt * 0.5;
+    core.position.set(0, coreY() + Math.sin(t * 1.6) * 0.12, 0);
+    floor.position.y = coreY() - 0.9;
+    shipCore.rotation.y += dt * 2;
+    shipRing.rotation.z -= dt * (state === 'playing' ? 3 : 1);
+    if (shield.visible) { shield.rotation.y += dt * 1.5; if (now() > shieldUntil) shield.visible = false; }
 
-  if (reducedMotion) {
-    // one static frame: accessible, no motion
-    renderer.render(scene, camera);
-    if (hintEl) hintEl.innerHTML = '🚀 3D diorama (motion off) · orbs: singularity · oidc · axeform · axepoll';
-  } else {
-    renderer.setAnimationLoop(() => {
-      if (document.hidden) return;
-      const dt = Math.min(clock.getDelta(), 0.05);
-      const t = clock.elapsedTime;
+    if (state !== 'playing') return;
 
-      stars.rotation.z += dt * 0.008;
-      dust.rotation.z -= dt * 0.012;
+    // ship steering
+    const spd = halfW * 2.4;
+    if (keys.left) shipTargetX -= spd * dt;
+    if (keys.right) shipTargetX += spd * dt;
+    shipTargetX = THREE.MathUtils.clamp(shipTargetX, -halfW + 1, halfW - 1);
+    const px = ship.position.x;
+    ship.position.x += (shipTargetX - ship.position.x) * Math.min(1, dt * 10);
+    ship.position.y = shipY() + Math.sin(t * 2.2) * 0.08;
+    ship.rotation.z = THREE.MathUtils.clamp(-(ship.position.x - px) * 1.4, -0.5, 0.5);
 
-      orbObjs.forEach(o => {
-        if (!o.alive) return;
-        if (o.group.scale.x < 1) o.group.scale.setScalar(Math.min(1, o.group.scale.x + dt * 2.5)); // respawn pop
-        o.core.rotation.x += dt * o.group.userData.spin;
-        o.core.rotation.y += dt * o.group.userData.spin * 0.7;
-        o.group.children[2].rotation.y += dt * 0.15;
-        o.group.position.y = o.group.userData.baseY + Math.sin(t * 1.2 + o.group.userData.phase) * 0.35;
-      });
+    // auto-fire
+    fireT -= dt;
+    const cd = now() < rapidUntil ? 0.1 : 0.27;
+    if (fireT <= 0) { fire(); fireT = cd; }
 
-      // ship follow + tilt
-      const px = ship.position.x, py = ship.position.y;
-      ship.position.lerp(shipTarget, 1 - Math.pow(0.0015, dt));
-      const vx = (ship.position.x - px) / Math.max(dt, 0.001);
-      const vy = (ship.position.y - py) / Math.max(dt, 0.001);
-      ship.rotation.z = THREE.MathUtils.clamp(-vx * 0.06, -0.6, 0.6);
-      ship.rotation.x = THREE.MathUtils.clamp(vy * 0.04, -0.5, 0.5);
-      shipRing.rotation.z -= dt * 2;
-      shipCore.rotation.y += dt * 1.5;
+    // spawning
+    if (spawnQueue > 0) {
+      spawnT -= dt;
+      const gap = Math.max(0.32, 0.95 - wave * 0.07);
+      if (spawnT <= 0) { spawnBug(); spawnQueue--; spawnT = gap; }
+    } else if (bugs.length === 0) {
+      interT += dt;
+      if (interT > 2.2) {
+        interT = 0;
+        const bonus = 100 + wave * 50;
+        score += bonus;
+        hud();
+        window.dispatchEvent(new CustomEvent('game:cleared', { detail: { wave, bonus } }));
+        startWave(wave + 1);
+      }
+    }
 
-      // lasers
-      for (let i = lasers.length - 1; i >= 0; i--) {
-        const L = lasers[i];
-        L.mesh.position.addScaledVector(L.vel, dt);
-        L.life -= dt;
-        if (L.life <= 0) {
-          scene.remove(L.mesh); // geo+mat shared, skip dispose
-          lasers.splice(i, 1);
+    // bullets
+    for (let i = bullets.length - 1; i >= 0; i--) {
+      const b = bullets[i];
+      b.mesh.position.x += b.vx * dt;
+      b.mesh.position.y += b.vy * dt;
+      let dead = b.mesh.position.y > HALF_H + 1;
+      if (!dead) {
+        for (let j = bugs.length - 1; j >= 0; j--) {
+          const g = bugs[j];
+          const dx = b.mesh.position.x - g.g.position.x, dy = b.mesh.position.y - g.g.position.y;
+          if (dx * dx + dy * dy < 0.42) {
+            dead = true;
+            if (--g.hp <= 0) killBug(j, false);
+            else { spawnSparks(b.mesh.position, 0xffd84d, 4); tone(300, 0.06, 'square', 0.02); }
+            break;
+          }
         }
       }
+      if (dead) { scene.remove(b.mesh); bullets.splice(i, 1); }
+    }
 
-      // rings
-      for (let i = rings.length - 1; i >= 0; i--) {
-        const R = rings[i];
-        R.life -= dt * 1.4;
-        R.mesh.scale.setScalar(R.mesh.scale.x + dt * 6);
-        R.mesh.material.opacity = Math.max(R.life, 0) * 0.9;
-        if (R.life <= 0) { scene.remove(R.mesh); R.mesh.geometry.dispose(); R.mesh.material.dispose(); rings.splice(i, 1); }
+    // bugs drift down toward the core
+    corePos.set(0, coreY(), 0);
+    for (let i = bugs.length - 1; i >= 0; i--) {
+      const g = bugs[i];
+      g.g.position.y -= g.speed * dt;
+      g.g.position.x += Math.sin(t * 2 + g.phase) * dt * 1.2 + (0 - g.g.position.x) * dt * 0.12;
+      g.g.rotation.x += dt * g.spin;
+      g.g.rotation.y += dt * g.spin * 0.6;
+      const dxs = g.g.position.x - ship.position.x, dys = g.g.position.y - ship.position.y;
+      if (dxs * dxs + dys * dys < 0.64) { killBug(i, true); continue; } // rammed!
+      if (g.g.position.distanceTo(corePos) < 1.0) {
+        spawnRing(g.g.position, 0xff4d5e);
+        scene.remove(g.g);
+        bugs.splice(i, 1);
+        damage();
+        if (state !== 'playing') return;
       }
+    }
 
-      updateTip();
-      renderer.render(scene, camera);
-      firstFrame = false;
-    });
+    // drops
+    for (let i = drops.length - 1; i >= 0; i--) {
+      const d = drops[i];
+      d.g.position.y -= d.vy * dt;
+      d.g.position.x += Math.sin(t * 3 + d.phase) * dt * 0.8;
+      d.g.rotation.y += dt * 2;
+      const dx = d.g.position.x - ship.position.x, dy = d.g.position.y - ship.position.y;
+      const dist2 = dx * dx + dy * dy;
+      if (dist2 < 5.8) { // magnet
+        d.g.position.x -= dx * Math.min(1, dt * 6);
+        d.g.position.y -= dy * Math.min(1, dt * 6);
+      }
+      if (dist2 < 0.5) {
+        const at = d.g.position.clone();
+        scene.remove(d.g);
+        drops.splice(i, 1);
+        score += 25;
+        applyPower(d.type, at);
+        continue;
+      }
+      if (d.g.position.y < -HALF_H - 1) { scene.remove(d.g); drops.splice(i, 1); }
+    }
+
+    // rings + sparks
+    for (let i = rings.length - 1; i >= 0; i--) {
+      const r = rings[i];
+      r.life -= dt * 1.5;
+      r.mesh.scale.setScalar(r.mesh.scale.x + dt * 7);
+      r.mesh.material.opacity = Math.max(r.life, 0);
+      if (r.life <= 0) { scene.remove(r.mesh); r.mesh.geometry.dispose(); r.mesh.material.dispose(); rings.splice(i, 1); }
+    }
+    for (let i = sparks.length - 1; i >= 0; i--) {
+      const s = sparks[i];
+      s.life -= dt;
+      s.mesh.position.x += s.vx * dt;
+      s.mesh.position.y += s.vy * dt;
+      s.mesh.material.opacity = Math.max(s.life * 1.8, 0);
+      if (s.life <= 0) { scene.remove(s.mesh); s.mesh.material.dispose(); sparks.splice(i, 1); }
+    }
+
+    hud();
   }
+
+  ship.position.set(0, shipY(), 1.2);
+  hud();
+  renderer.setAnimationLoop(() => {
+    if (document.hidden) return;
+    const dt = Math.min(clock.getDelta(), 0.05);
+    update(dt, clock.elapsedTime);
+    renderer.render(scene, camera);
+  });
 } catch (err) {
-  // graceful degradation: hide 3D, site keeps working
   try {
-    document.getElementById('bg3d')?.remove();
-    const hud = document.getElementById('gameHud');
-    if (hud) hud.querySelector('.game-hint').textContent = '3D offline — the rest of the site still works 🛟';
+    const h = document.querySelector('#arcStart h4');
+    if (h) h.textContent = '👾 3D OFFLINE';
+    const p = document.querySelector('#arcStart p');
+    if (p) p.textContent = 'WebGL or the Three.js CDN is unavailable — everything else on this page still works.';
+    const b = document.getElementById('arcStartBtn');
+    if (b) b.style.display = 'none';
   } catch {}
-  if (window.console) console.warn('3D layer disabled:', err);
+  if (window.console) console.warn('arcade disabled:', err);
 }
 </script>
+
 </body>
 </html>
